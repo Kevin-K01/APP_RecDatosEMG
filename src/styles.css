@@ -1,9 +1,118 @@
-body, html{
-    background-color: black;
+/* Estilos generales del contenedor */
+.contenedor {
+    display: flex;
+    align-items: flex-start; 
+    gap: 20px; 
+    padding: 20px;
+  }
+  
+  /* Estilos del formulario */
+  .formulario {
+    width: 500px;
+    padding: 28px;
+    background: #2d3748; 
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
+  }
+  
+  .formulario label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  
+  .formulario input,
+  .formulario textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #4a5568;
+    border-radius: 5px;
+    background: #1a202c;
+    color: #fff;
+  }
+  
+  .formulario textarea {
+    height: 100px;
+  }
+  
+  .formulario button {
+    width: 100%;
+    padding: 15px;
+    margin: 10px;
+    background-color: #38bdf8;
     color: white;
-}
+    border:none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .formulario button:hover {
+    background-color: #0ea5e9;
+  }
 
-form{
-    align-items:start;
-
-}
+  /* Contenedor de los botones */
+  .botones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  h1{
+    text-align: center;
+  }
+  /* Botones */
+  .capturar, .detener {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  
+  .capturar {
+    background-color: #429b82;
+    color: white;
+    box-shadow: 0 2px 6px rgba(52, 211, 153, 0.2);
+  }
+  
+  .capturar:hover {
+    background-color:#05a268c8 ;
+    box-shadow: 0 4px 8px rgba(52, 211, 153, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  .capturar:active {
+    background-color: #1e7a5f;
+    transform: translateY(1px);
+  }
+  
+  .detener {
+    background-color: #f87171;
+    color: white;
+    box-shadow: 0 2px 6px rgba(248, 113, 113, 0.2);
+  }
+  
+  .detener:hover {
+    background-color: #e03e3e;
+    box-shadow: 0 4px 8px rgba(248, 113, 113, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  .detener:active {
+    background-color: #c44d4d;
+    transform: translateY(1px);
+  }
+  
+  /* Fondo general */
+  body {
+    background-color: #1a202c;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #f7fafc;
+  }
+  
