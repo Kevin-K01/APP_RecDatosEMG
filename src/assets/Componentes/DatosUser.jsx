@@ -78,6 +78,7 @@ const DatosUser = () => {
         <label>Nombre del paciente</label>
         <input
           type="text"
+          placeholder="ingresa un nombre"
           name="nombre"
           value={formData.nombre}
           onChange={handleChange}
@@ -86,6 +87,7 @@ const DatosUser = () => {
         <input
           type="number"
           name="sesion"
+          placeholder="ingresa el numero de sesión"
           min="1"
           value={formData.sesion}
           onChange={handleChange}
@@ -94,6 +96,7 @@ const DatosUser = () => {
         <label>Observaciones</label>
         <textarea
           name="observaciones"
+          placeholder="ingresa las observaciones"
           value={formData.observaciones}
           onChange={handleChange}
         />
