@@ -1,0 +1,24 @@
+.grafica-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: #111;
+    padding: 15px;
+    height: 700px;
+  }
+  
+  .grafica-item {
+    height: 130px;
+    width: 400px;
+  }
+  
+  .grafica-title {
+    color: #fff;
+    text-align: center;
+    margin: 5px;
+  }
+  
+  canvas {
+    background: #222;
+  }
+  

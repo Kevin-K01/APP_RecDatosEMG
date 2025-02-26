@@ -5,6 +5,7 @@ const DatosUser = () => {
   const [formData, setFormData] = useState({
     nombre: "",
     sesion: "",
+    curp: "",
     observaciones: "",
   });
 
@@ -26,12 +27,12 @@ const DatosUser = () => {
     e.preventDefault();
     console.log("Formulario enviado: ", formData);
     // Verificar que los campos no estén vacíos antes de agregar los datos
-    if (formData.nombre && formData.sesion && formData.observaciones) {
+    if (formData.nombre && formData.sesion && formData.observaciones &&formData.curp) {
         // Agregar los datos al estado y al localStorage solo si todos los campos están completos
         const newData = [...allData, formData];
         setAllData(newData);
         localStorage.setItem("formData", JSON.stringify(newData));
-        setFormData({ nombre: "", sesion: "", observaciones: "" }); // Limpiar el formulario
+        setFormData({ nombre: "", sesion: "", curp:"",  observaciones: ""}); // Limpiar el formulario
       } 
   };
 
@@ -43,12 +44,12 @@ const DatosUser = () => {
       }
     // Crear el archivo CSV con los datos almacenados
     const csvRows = [];
-    const headers = ["Nombre", "Sesión", "Observaciones"];
+    const headers = ["Nombre", "Sesión", "curp", "Observaciones"];
     csvRows.push(headers.join(",")); // Cabeceras del archivo CSV
 
     // Convertir los datos a filas CSV
     allData.forEach((row) => {
-      const values = [row.nombre, row.sesion, row.observaciones];
+      const values = [row.nombre, row.sesion, row.curp, row.observaciones];
       csvRows.push(values.join(","));
     });
 
@@ -91,6 +92,14 @@ const DatosUser = () => {
           min="1"
           value={formData.sesion}
           onChange={handleChange}
+        />
+        <label>CURP</label>
+        <input
+        type='text'
+        name="curp"
+        placeholder ="ingresa la curp"
+        value={formData.curp}
+        onChange={handleChange}
         />
 
         <label>Observaciones</label>

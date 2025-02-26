@@ -1,7 +1,18 @@
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { io } from "socket.io-client";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import "../Styles_css/Graficas.css"; // Importa el archivo CSS
 
-// Registrar los componentes de Chart.js
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -12,31 +23,69 @@ ChartJS.register(
   Legend
 );
 
+const socket = io("http://127.0.0.1:5000");
+
+const NUM_SENSORS = 8;
+const WINDOW_SIZE = 100; // Número de muestras a mostrar
+
 const Graficas = () => {
-  // Definir los datos de la gráfica
-  const data = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'], // Ejes X
-    datasets: [
-      {
-        label: 'Datos emg', // Título de la línea
-        data: [30, 70, 50, 80, 90], // Datos para los puntos de la línea
-        borderColor: 'rgb(75, 192, 192)', // Color de la línea
-        tension: 0.1, // Curvatura de la línea
-        fill: false, // No llenar bajo la línea
-      },
-    ],
-  };
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false, // Permite que el tamaño sea controlado por el contenedor
-  };
+  const [emgData, setEmgData] = useState(
+    Array(NUM_SENSORS).fill(Array(WINDOW_SIZE).fill(0))
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      socket.on("emg_data", (data) => {
+        setEmgData((prevData) =>
+          prevData.map((sensorData, i) => [...sensorData.slice(1), data.emg[i]])
+        );
+      });
+    }, 100); // Ajusta el intervalo en milisegundos (100ms en este caso)
+
+    return () => {
+      clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
+      socket.off("emg_data");
+    };
+  }, []);
 
   return (
-    <div style={{ width: '80%', height: '400px' }}>
-      <h2>DATOS</h2>
-      <Line data={data} options={options} />
+    <div className="grafica-container">
+      {emgData.map((sensorData, index) => (
+        <div key={index} className="grafica-item">
+          <h3 className="grafica-title">Sensor {index + 1}</h3>
+          <Line
+            data={{
+              labels: Array(WINDOW_SIZE).fill(""),
+              datasets: [
+                {
+                  label: `Sensor ${index + 1}`,
+                  data: sensorData,
+                  borderColor: "#1E88E5",
+                  borderWidth: 2.5,
+                  tension: 0,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: false,
+              scales: {
+                y: {
+                  min: -100,
+                  max: 100,
+                  ticks: { color: "#aaa" },
+                },
+                x: { display: false },
+              },
+              elements: { point: { radius: 0 } },
+              plugins: { legend: { display: false } },
+            }}
+          />
+        </div>
+      ))}
     </div>
   );
-}
+};
 
-export default Graficas
+export default Graficas;
