@@ -115,4 +115,43 @@
     padding: 0;
     color: #f7fafc;
   }
+
+
+  /*Estilos generales del select*/
+  select{
+    background-color:#1a1a1a;
+    color:#00aaff;
+    border:2px solid #0077cc;
+    padding:10px;
+    font-size:14px;
+    border-radius:5px;
+    outline:none;
+    cursor:pointer;
+    transition: all 0.3s ease-in-out;
+    margin: 0px;
+  }
+/*cambia el color cuando el usuario se coloca sobre el*/
+  select:hover{
+    border-color:#00ccff;
+  }
+  
+  select:focus{
+    box-shadow:0px 0px 10px #00ccff;
+    border-color: #00ccff;
+  }
+
+  /*estilo para las opciones*/
+  option{
+    background-color:#000000;
+    color:#00aaff;
+    font-size:14px;
+    padding:5px;
+  }
+
+  /*Estilo cuando se selecciona una opción*/
+  select option:checked{
+    background-color: #0077cc;
+    color:white;
+
+  }
   

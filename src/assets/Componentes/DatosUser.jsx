@@ -6,6 +6,7 @@ const DatosUser = () => {
     nombre: "",
     sesion: "",
     curp: "",
+    Extremidad_Afectada: "",
     observaciones: "",
   });
 
@@ -27,12 +28,12 @@ const DatosUser = () => {
     e.preventDefault();
     console.log("Formulario enviado: ", formData);
     // Verificar que los campos no estén vacíos antes de agregar los datos
-    if (formData.nombre && formData.sesion && formData.observaciones &&formData.curp) {
+    if (formData.nombre && formData.sesion && formData.Extremidad_Afectada && formData.observaciones &&formData.curp) {
         // Agregar los datos al estado y al localStorage solo si todos los campos están completos
         const newData = [...allData, formData];
         setAllData(newData);
         localStorage.setItem("formData", JSON.stringify(newData));
-        setFormData({ nombre: "", sesion: "", curp:"",  observaciones: ""}); // Limpiar el formulario
+        setFormData({ nombre: "", sesion: "", curp:"", Extremidad_Afectada:"",  observaciones: ""}); // Limpiar el formulario
       } 
   };
 
@@ -44,12 +45,12 @@ const DatosUser = () => {
       }
     // Crear el archivo CSV con los datos almacenados
     const csvRows = [];
-    const headers = ["Nombre", "Sesión", "curp", "Observaciones"];
+    const headers = ["Nombre", "Sesión", "curp", "Extremidad_Afectada", "Observaciones"];
     csvRows.push(headers.join(",")); // Cabeceras del archivo CSV
 
     // Convertir los datos a filas CSV
     allData.forEach((row) => {
-      const values = [row.nombre, row.sesion, row.curp, row.observaciones];
+      const values = [row.nombre, row.sesion, row.curp, row.Extremidad_Afectada, row.observaciones];
       csvRows.push(values.join(","));
     });
 
@@ -101,6 +102,15 @@ const DatosUser = () => {
         value={formData.curp}
         onChange={handleChange}
         />
+        <div clasName="contenedor">
+        <label>Extremidad Afectada</label>
+        <select value={formData.Extremidad_Afectada} onChange={handleChange}>
+        <option value="">Selecciona...</option>
+        <option value="opcion1">Miembro superior derecho</option>
+        <option value="opcion2">Miembro superior izquierdo</option>
+        </select>
+        </div>
+        
 
         <label>Observaciones</label>
         <textarea
