@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Graficas from "./Graficas";
 
 const DatosUser = () => {
@@ -11,11 +11,31 @@ const DatosUser = () => {
   });
 
   const [allData, setAllData] = useState([]); // Estado para mantener todos los datos
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+
+  // Cargar datos desde el CSV almacenado localmente al iniciar
+  useEffect(() => {
+    const storedData = localStorage.getItem("formData");
+    if (storedData) {
+      setAllData(JSON.parse(storedData));
+    } else {
+      setAllData([]); // Si no hay datos, asegurarse de que el estado esté vacío
+    }
+  }, []);
+
+   // Guardar datos en localStorage cada vez que `allData` cambie
+   useEffect(() => {
+    if (allData.length > 0) {
+      localStorage.setItem("formData", JSON.stringify(allData));
+    }
+  }, [allData]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Evita valores negativos en "sesion"
-    if (name === "sesion" && value < 0) {
+    if (name === "sesion" && (value < 1 || !Number.isInteger(Number(value)))) {
       return;
     }
     setFormData({
@@ -23,106 +43,100 @@ const DatosUser = () => {
       [name]: value,
     });
   };
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    console.log("Formulario enviado: ", formData);
-    // Verificar que los campos no estén vacíos antes de agregar los datos
-    if (formData.nombre && formData.sesion && formData.Extremidad_Afectada && formData.observaciones &&formData.curp) {
-        // Agregar los datos al estado y al localStorage solo si todos los campos están completos
-        const newData = [...allData, formData];
-        setAllData(newData);
-        localStorage.setItem("formData", JSON.stringify(newData));
-        setFormData({ nombre: "", sesion: "", curp:"", Extremidad_Afectada:"",  observaciones: ""}); // Limpiar el formulario
-      } 
-  };
-
-  const handleDownload = () => {
-    
-    if (allData.length === 0) {
-        alert("No hay datos para descargar.");
-        return;
-      }
-    // Crear el archivo CSV con los datos almacenados
-    const csvRows = [];
-    const headers = ["Nombre", "Sesión", "curp", "Extremidad_Afectada", "Observaciones"];
-    csvRows.push(headers.join(",")); // Cabeceras del archivo CSV
-
-    // Convertir los datos a filas CSV
-    allData.forEach((row) => {
-      const values = [row.nombre, row.sesion, row.curp, row.Extremidad_Afectada, row.observaciones];
-      csvRows.push(values.join(","));
-    });
-
-    // Crear un blob CSV
-    const csvContent = csvRows.join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
-
-    // Crear un enlace para descargar el archivo CSV
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "datos_pacientes.csv";
-    link.click(); // Simula el clic para descargar el archivo
-
-     // Limpiar el localStorage después de descargar
-     localStorage.removeItem("formData");
-
-     // También limpiar el estado allData para que no quede en memoria
-     setAllData([]);
-  };
-
   
 
-  return (
-    <div className="contenedor">
-      <form onSubmit={handleAdd} className="formulario">
-        <h1 className="tituloform">Recolección de datos EMG</h1>
-        <label>Nombre del paciente</label>
-        <input
-          type="text"
-          placeholder="ingresa un nombre"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-        />
-        <label>Número de sesión</label>
-        <input
-          type="number"
-          name="sesion"
-          placeholder="ingresa el numero de sesión"
-          min="1"
-          value={formData.sesion}
-          onChange={handleChange}
-        />
-        <label>CURP</label>
-        <input
-        type='text'
-        name="curp"
-        placeholder ="ingresa la curp"
-        value={formData.curp}
-        onChange={handleChange}
-        />
-        <div clasName="contenedor">
-        <label>Extremidad Afectada</label>
-        <select value={formData.Extremidad_Afectada} onChange={handleChange}>
-        <option value="">Selecciona...</option>
-        <option value="opcion1">Miembro superior derecho</option>
-        <option value="opcion2">Miembro superior izquierdo</option>
-        </select>
-        </div>
-        
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    setError("");  // Limpiar mensajes anteriores
+    setSuccess(""); 
+  
+    const { nombre, sesion, curp, Extremidad_Afectada, observaciones } = formData;
+    // Validación de campos vacíos
+    if (!nombre || !sesion || !curp || !Extremidad_Afectada || !observaciones) {
+      setError("Todos los campos son obligatorios.");
+      setTimeout(() => setError(""), 2000);
+      return;
+    }
+  
+    const curpUpper = curp.trim().toUpperCase();
+  
+    try {
+      const res = await fetch("http://localhost:5000/add_patient", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, curp: curpUpper }),
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        setError(errorData.error || "Error al agregar el paciente.");
+        setTimeout(() => setError(""), 2000);
+        return;
+      }
+  
+      const responseData = await res.json();
+      setSuccess(responseData.message || "Paciente agregado correctamente.");
+      setTimeout(() => setSuccess(""), 2000);
+      setFormData({ nombre: "", sesion: "", curp: "", Extremidad_Afectada: "", observaciones: "" }); // Limpiar formulario
+    } catch (err) {
+      setError("No se pudo agregar el paciente.");
+      setTimeout(() => setError(""), 2000);
+      console.error(err);
+    }
+  };
+  
 
-        <label>Observaciones</label>
-        <textarea
-          name="observaciones"
-          placeholder="ingresa las observaciones"
-          value={formData.observaciones}
+    return (
+      <div className="contenedor">
+        <form onSubmit={handleAdd} className="formulario">
+          <h1 className="tituloform">Recolección de datos EMG</h1>
+          <label>Nombre del paciente</label>
+          <input
+            type="text"
+            placeholder="ingresa un nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+          />
+          <label>Número de sesión</label>
+          <input
+            type="number"
+            name="sesion"
+            placeholder="ingresa el numero de sesión"
+            min="1"
+            value={formData.sesion}
+            onChange={handleChange}
+          />
+          <label>CURP</label>
+          <input
+          type='text'
+          name="curp"
+          placeholder ="ingresa la curp"
+          value={formData.curp}
           onChange={handleChange}
-        />
+          />
+
+          <label>Extremidad Afectada</label>
+          <select name="Extremidad_Afectada" value={formData.Extremidad_Afectada} onChange={handleChange}>
+          <option value="">Selecciona...</option>
+          <option value="Miembro Superior Derecho">Miembro superior derecho</option>
+          <option value="Miembro Superior Isquierdo">Miembro superior izquierdo</option>
+          </select>
+          
+
+          <label>Observaciones</label>
+          <textarea
+            name="observaciones"
+            placeholder="ingresa las observaciones"
+            value={formData.observaciones}
+            onChange={handleChange}
+          />
 
         <button type="submit">Agregar</button>
-        <button onClick={handleDownload} className="botondescargar">Descargar CSV</button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {success && <p style={{ color: "green" }}>{success}</p>}
       </form>
+      
       
 
       <Graficas />

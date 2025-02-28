@@ -129,6 +129,7 @@
     cursor:pointer;
     transition: all 0.3s ease-in-out;
     margin: 0px;
+    margin-bottom: 15px;
   }
 /*cambia el color cuando el usuario se coloca sobre el*/
   select:hover{
