@@ -13,6 +13,8 @@ const DatosUser = () => {
   const [allData, setAllData] = useState([]); // Estado para mantener todos los datos
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const[erroremg,setErrorEmg] = useState("");
+  const[successemg,setSuccessEmg] = useState("");
 
 
   // Cargar datos desde el CSV almacenado localmente al iniciar
@@ -43,7 +45,7 @@ const DatosUser = () => {
       [name]: value,
     });
   };
-  
+
 
   const handleAdd = async (e) => {
     e.preventDefault();
@@ -84,6 +86,29 @@ const DatosUser = () => {
       console.error(err);
     }
   };
+
+  const capEmg = async(value) =>{
+    setErrorEmg("");
+    setSuccessEmg("");
+    try{
+      const response = await fetch("http://localhost:5000/receive",{
+        method:"POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({value}),
+
+      });
+
+      const data = await response.json();
+      console.log("Respuesta del servidor: ", data);
+      
+    }catch(error){
+      console.error("Error al enviar datos: ", error);
+
+    }
+    
+  }
   
 
     return (
@@ -141,8 +166,8 @@ const DatosUser = () => {
 
       <Graficas />
 
-      <button className="capturar">Capturar EMG</button>
-      <button className="detener">Detener captura</button>
+      <button onClick = {() => capEmg(true)} className="capturar">Capturar EMG</button>
+      <button onClick = {() => capEmg(false)} className="detener">Detener captura</button>
     </div>
   );
 };
