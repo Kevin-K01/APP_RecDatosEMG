@@ -29,22 +29,25 @@ const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100; // Número de muestras a mostrar
 
 const Graficas = () => {
+  // Inicializar cada sensor con su propio array independiente
   const [emgData, setEmgData] = useState(
-    Array(NUM_SENSORS).fill(Array(WINDOW_SIZE).fill(0))
+    Array.from({ length: NUM_SENSORS }, () => Array(WINDOW_SIZE).fill(0))
   );
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      socket.on("emg_data", (data) => {
-        setEmgData((prevData) =>
-          prevData.map((sensorData, i) => [...sensorData.slice(1), data.emg[i]])
-        );
-      });
-    }, 100); // Ajusta el intervalo en milisegundos (100ms en este caso)
+    const handleEmgData = (data) => {
+      setEmgData((prevData) =>
+        prevData.map((sensorData, i) => [
+          ...sensorData.slice(1), // Desplazar datos
+          data.emg[i] || 0, // Agregar nueva muestra
+        ])
+      );
+    };
+
+    socket.on("emg_data", handleEmgData);
 
     return () => {
-      clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
-      socket.off("emg_data");
+      socket.off("emg_data", handleEmgData);
     };
   }, []);
 
@@ -62,7 +65,7 @@ const Graficas = () => {
                   data: sensorData,
                   borderColor: "#1E88E5",
                   borderWidth: 2.5,
-                  tension: 0,
+                  tension: 0.2, // Suaviza la línea un poco
                 },
               ],
             }}
@@ -89,3 +92,4 @@ const Graficas = () => {
 };
 
 export default Graficas;
+

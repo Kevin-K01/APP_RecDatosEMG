@@ -1,10 +1,9 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Graficas from "./Graficas";
 
 const DatosUser = () => {
   const [formData, setFormData] = useState({
     nombre: "",
-    sesion: "",
     curp: "",
     Extremidad_Afectada: "",
     observaciones: "",
@@ -13,9 +12,8 @@ const DatosUser = () => {
   const [allData, setAllData] = useState([]); // Estado para mantener todos los datos
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const[erroremg,setErrorEmg] = useState("");
-  const[successemg,setSuccessEmg] = useState("");
-
+  const [successEmg, setSuccessEmg] = useState("");
+  const [errorEmg, setErrorEmg] = useState("");
 
   // Cargar datos desde el CSV almacenado localmente al iniciar
   useEffect(() => {
@@ -27,59 +25,52 @@ const DatosUser = () => {
     }
   }, []);
 
-   // Guardar datos en localStorage cada vez que `allData` cambie
-   useEffect(() => {
+  // Guardar datos en localStorage cada vez que `allData` cambie
+  useEffect(() => {
     if (allData.length > 0) {
       localStorage.setItem("formData", JSON.stringify(allData));
     }
   }, [allData]);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "sesion" && (value < 1 || !Number.isInteger(Number(value)))) {
-      return;
-    }
     setFormData({
       ...formData,
       [name]: value,
     });
   };
 
-
   const handleAdd = async (e) => {
     e.preventDefault();
-    setError("");  // Limpiar mensajes anteriores
-    setSuccess(""); 
-  
-    const { nombre, sesion, curp, Extremidad_Afectada, observaciones } = formData;
+    setError(""); // Limpiar mensajes anteriores
+    setSuccess("");
+
+    const { nombre, curp, Extremidad_Afectada, observaciones } = formData;
     // Validación de campos vacíos
-    if (!nombre || !sesion || !curp || !Extremidad_Afectada || !observaciones) {
+    if (!nombre || !curp || !Extremidad_Afectada || !observaciones) {
       setError("Todos los campos son obligatorios.");
       setTimeout(() => setError(""), 2000);
       return;
     }
-  
-    const curpUpper = curp.trim().toUpperCase();
-  
+
     try {
       const res = await fetch("http://localhost:5000/add_patient", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, curp: curpUpper }),
+        body: JSON.stringify({ ...formData, curp: curp.trim().toUpperCase() }),
       });
-  
+
       if (!res.ok) {
         const errorData = await res.json();
         setError(errorData.error || "Error al agregar el paciente.");
         setTimeout(() => setError(""), 2000);
         return;
       }
-  
+
       const responseData = await res.json();
       setSuccess(responseData.message || "Paciente agregado correctamente.");
       setTimeout(() => setSuccess(""), 2000);
-      setFormData({ nombre: "", sesion: "", curp: "", Extremidad_Afectada: "", observaciones: "" }); // Limpiar formulario
+      setFormData({ nombre: "", curp: "", Extremidad_Afectada: "", observaciones: "" }); // Limpiar formulario
     } catch (err) {
       setError("No se pudo agregar el paciente.");
       setTimeout(() => setError(""), 2000);
@@ -87,90 +78,170 @@ const DatosUser = () => {
     }
   };
 
-  const capEmg = async(value) =>{
-    setErrorEmg("");
+  // Controlar inicio y detención de la captura EMG
+  const capEmg = async (value) => {
+    setErrorEmg(""); // Limpiar mensajes anteriores
     setSuccessEmg("");
-    try{
-      const response = await fetch("http://localhost:5000/receive",{
-        method:"POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({value}),
 
-      });
+    try {
+      if (value === true) {
+        let nombre2 = prompt("Ingresa el nombre del paciente:");
+        if (nombre2 === null) {
+          alert("Proceso cancelado.");
+          return;
+        }
+        nombre2 = nombre2.trim().toUpperCase();
 
-      const data = await response.json();
-      console.log("Respuesta del servidor: ", data);
-      
-    }catch(error){
-      console.error("Error al enviar datos: ", error);
+        if (nombre2 === "") {
+          alert("Ingresa un nombre válido.");
+          return;
+        }
 
+        let sesion = prompt("Ingresa el número de sesión:");
+        if (sesion === null) {
+          alert("Proceso cancelado.");
+          return;
+        }
+
+        sesion = Number(sesion);
+        if (isNaN(sesion) || sesion < 1) {
+          alert("El número de sesión debe ser un valor numérico mayor o igual a 1.");
+          return;
+        }
+
+        if (!nombre2 || !sesion) {
+          setErrorEmg("El nombre y el número de sesión son obligatorios");
+          setTimeout(() => setErrorEmg(""), 2000);
+          alert("El nombre y el número de sesión son obligatorios.");
+          return;
+        }
+
+        const observaciones = prompt("Ingresa las observaciones");
+        if (observaciones === null) {
+          alert("Proceso cancelado.");
+          return;
+        }
+        if (!observaciones) {
+          setErrorEmg("Las observaciones son obligatorias");
+          setTimeout(() => setErrorEmg(""), 2000);
+          return;
+        }
+
+        const response = await fetch(`http://localhost:5000/start_emg_capture`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre: nombre2,
+            sesion: sesion,
+            observaciones: observaciones,
+          }),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          setErrorEmg(data.error || "Error al buscar al paciente.");
+          setTimeout(() => setErrorEmg(""), 2000);
+          return;
+        }
+
+        if (data.exists) {
+          setSuccessEmg("Paciente encontrado");
+          setTimeout(() => setSuccessEmg(""), 2000);
+        } else {
+          setErrorEmg("Paciente no encontrado, por favor, agrégalo");
+          setTimeout(() => setErrorEmg(""), 2000);
+        }
+
+        console.log("Respuesta del servidor: ", data);
+      }
+
+      if (value === false) {
+        const respons = await fetch(`http://localhost:5000/stop_emg_capture`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            valor: value,
+          }),
+        });
+        const data = await respons.json();
+
+        if (data.message) {
+          setSuccessEmg("Captura EMG detenida");
+          setTimeout(() => setSuccessEmg(""), 2000);
+        } else {
+          setErrorEmg("Error al detener la captura.");
+          setTimeout(() => setErrorEmg(""), 2000);
+        }
+
+        console.log("Respuesta del servidor: ", data);
+      }
+    } catch (error) {
+      setErrorEmg(`Error al capturar datos: ${error.message}`);
+      setTimeout(() => setErrorEmg(""), 2000);
+      console.error("Error al capturar datos: ", error);
     }
-    
-  }
-  
+  };
 
-    return (
-      <div className="contenedor">
-        <form onSubmit={handleAdd} className="formulario">
-          <h1 className="tituloform">Recolección de datos EMG</h1>
-          <label>Nombre del paciente</label>
-          <input
-            type="text"
-            placeholder="ingresa un nombre"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-          />
-          <label>Número de sesión</label>
-          <input
-            type="number"
-            name="sesion"
-            placeholder="ingresa el numero de sesión"
-            min="1"
-            value={formData.sesion}
-            onChange={handleChange}
-          />
-          <label>CURP</label>
-          <input
-          type='text'
+  return (
+    <div className="contenedor">
+      <form onSubmit={handleAdd} className="formulario">
+        <h1 className="tituloform">Recolección de datos EMG</h1>
+        <label>Nombre del paciente</label>
+        <input
+          type="text"
+          placeholder="Ingresa un nombre"
+          name="nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+        />
+        <label>CURP</label>
+        <input
+          type="text"
           name="curp"
-          placeholder ="ingresa la curp"
+          placeholder="Ingresa la CURP"
           value={formData.curp}
           onChange={handleChange}
-          />
+        />
 
-          <label>Extremidad Afectada</label>
-          <select name="Extremidad_Afectada" value={formData.Extremidad_Afectada} onChange={handleChange}>
+        <label>Extremidad Afectada</label>
+        <select
+          name="Extremidad_Afectada"
+          value={formData.Extremidad_Afectada}
+          onChange={handleChange}
+        >
           <option value="">Selecciona...</option>
           <option value="Miembro Superior Derecho">Miembro superior derecho</option>
-          <option value="Miembro Superior Isquierdo">Miembro superior izquierdo</option>
-          </select>
-          
+          <option value="Miembro Superior Izquierdo">Miembro superior izquierdo</option>
+        </select>
 
-          <label>Observaciones</label>
-          <textarea
-            name="observaciones"
-            placeholder="ingresa las observaciones"
-            value={formData.observaciones}
-            onChange={handleChange}
-          />
+        <label>Observaciones</label>
+        <textarea
+          name="observaciones"
+          placeholder="Ingresa las observaciones"
+          value={formData.observaciones}
+          onChange={handleChange}
+        />
 
         <button type="submit">Agregar</button>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {success && <p style={{ color: "green" }}>{success}</p>}
       </form>
-      
-      
 
       <Graficas />
-
-      <button onClick = {() => capEmg(true)} className="capturar">Capturar EMG</button>
-      <button onClick = {() => capEmg(false)} className="detener">Detener captura</button>
+      <div className="botones">
+        <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
+        <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
+        {errorEmg && <p style={{ color: "red" }}>{errorEmg}</p>}
+        {successEmg && <p style={{ color: "green" }}>{successEmg}</p>}
+      </div>
     </div>
   );
 };
 
 export default DatosUser;
+
 
