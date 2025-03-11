@@ -190,6 +190,13 @@ h1 {
   transform: translateX(0); /* Vuelve a la posición original */
 }
 
+.formulario.hide ~ .botones .errorm, .successm{
+  transform: translateX(100%); /* Mueve los mensajes hacia la izquierda */
+}
+
+
+
+
 
 /* Fondo general */
 body {

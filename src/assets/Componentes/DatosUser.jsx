@@ -268,8 +268,9 @@ const DatosUser = () => {
         
         <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
         <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
-        {errorEmg && <p style={{ color: "red" }}>{errorEmg}</p>}
-        {successEmg && <p style={{ color: "green" }}>{successEmg}</p>}
+      
+        {errorEmg && <p className="errorm" style={{ color: "red" }}>{errorEmg}</p>}
+        {successEmg && <p className="successm" style={{ color: "green" }}>{successEmg}</p>}
       </div>
       <div className='robodk'>
         <RoboDKWebIframe />  
