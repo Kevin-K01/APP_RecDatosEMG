@@ -190,10 +190,14 @@ h1 {
   transform: translateX(0); /* Vuelve a la posición original */
 }
 
-.formulario.hide ~ .botones .errorm, .successm{
+.formulario.hide ~ .botones .errorm{
   transform: translateX(100%); /* Mueve los mensajes hacia la izquierda */
 }
 
+.formulario.hide ~ .botones .successm{
+  transform: translateX(100%);
+
+}
 
 
 
