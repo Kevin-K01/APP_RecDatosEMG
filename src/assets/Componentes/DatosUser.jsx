@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import Graficas from "./Graficas";
+import "..//Styles_css/robodk.css";
+import RoboDKWebIframe from './RoboDKWebIframe';
+
 
 const DatosUser = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +17,12 @@ const DatosUser = () => {
   const [success, setSuccess] = useState("");
   const [successEmg, setSuccessEmg] = useState("");
   const [errorEmg, setErrorEmg] = useState("");
+
+  const [isVisible, setIsVisible] = useState(true); // Estado para mostrar/ocultar el formulario
+
+  const toggleForm = () => {
+    setIsVisible(!isVisible); // Cambia el estado de visibilidad
+  };
 
   // Cargar datos desde el CSV almacenado localmente al iniciar
   useEffect(() => {
@@ -108,11 +117,22 @@ const DatosUser = () => {
           alert("El número de sesión debe ser un valor numérico mayor o igual a 1.");
           return;
         }
+        let curp = prompt("Ingresa tu curp: ");
+        if (curp === null) {
+          alert("Proceso cancelado.");
+          return;
+        }
+        curp = curp.trim().toUpperCase();
 
-        if (!nombre2 || !sesion) {
-          setErrorEmg("El nombre y el número de sesión son obligatorios");
+        if (curp === "") {
+          alert("Ingresa una curp válida.");
+          return;
+        }
+
+        if (!nombre2 || !sesion || !curp) {
+          setErrorEmg("El nombre, la curp y el número de sesión son obligatorios");
           setTimeout(() => setErrorEmg(""), 2000);
-          alert("El nombre y el número de sesión son obligatorios.");
+          alert("El nombre, curp y el número de sesión son obligatorios.");
           return;
         }
 
@@ -135,6 +155,7 @@ const DatosUser = () => {
           body: JSON.stringify({
             nombre: nombre2,
             sesion: sesion,
+            curp: curp,
             observaciones: observaciones,
           }),
         });
@@ -188,56 +209,75 @@ const DatosUser = () => {
 
   return (
     <div className="contenedor">
-      <form onSubmit={handleAdd} className="formulario">
-        <h1 className="tituloform">Recolección de datos EMG</h1>
-        <label>Nombre del paciente</label>
-        <input
-          type="text"
-          placeholder="Ingresa un nombre"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-        />
-        <label>CURP</label>
-        <input
-          type="text"
-          name="curp"
-          placeholder="Ingresa la CURP"
-          value={formData.curp}
-          onChange={handleChange}
-        />
+      
+      
+      <div className={`formulario ${isVisible ? 'show' : 'hide'}`}>
+      
+      
+        <form onSubmit={handleAdd}>
+          <h1 className="tituloform">Registro De Pacientes</h1>
+          <label>Nombre del paciente</label>
+          <input
+            type="text"
+            placeholder="Ingresa un nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+          />
+          <label>CURP</label>
+          <input
+            type="text"
+            name="curp"
+            placeholder="Ingresa la CURP"
+            value={formData.curp}
+            onChange={handleChange}
+          />
 
-        <label>Extremidad Afectada</label>
-        <select
-          name="Extremidad_Afectada"
-          value={formData.Extremidad_Afectada}
-          onChange={handleChange}
-        >
-          <option value="">Selecciona...</option>
-          <option value="Miembro Superior Derecho">Miembro superior derecho</option>
-          <option value="Miembro Superior Izquierdo">Miembro superior izquierdo</option>
-        </select>
+          <label>Extremidad Afectada</label>
+          <select
+            name="Extremidad_Afectada"
+            value={formData.Extremidad_Afectada}
+            onChange={handleChange}
+          >
+            <option value="">Selecciona...</option>
+            <option value="Miembro Superior Derecho">Miembro superior derecho</option>
+            <option value="Miembro Superior Izquierdo">Miembro superior izquierdo</option>
+          </select>
 
-        <label>Observaciones</label>
-        <textarea
-          name="observaciones"
-          placeholder="Ingresa las observaciones"
-          value={formData.observaciones}
-          onChange={handleChange}
-        />
+          <label>Observaciones</label>
+          <textarea
+           name="observaciones"
+            placeholder="Ingresa las observaciones"
+            value={formData.observaciones}
+            onChange={handleChange}
+           />
 
-        <button type="submit">Agregar</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
-      </form>
+          <button type="submit">Agregar</button>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          {success && <p style={{ color: "green" }}>{success}</p>}
+        </form>
+        
+
+      </div>
+      <button  className="toggle-button" onClick={toggleForm}> {isVisible ? 'Ocultar' : 'Mostrar'}</button>
+      
 
       <Graficas />
+      
       <div className="botones">
+        
         <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
         <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
         {errorEmg && <p style={{ color: "red" }}>{errorEmg}</p>}
         {successEmg && <p style={{ color: "green" }}>{successEmg}</p>}
       </div>
+      <div className='robodk'>
+        <RoboDKWebIframe />  
+      </div>
+
+
+      
+      
     </div>
   );
 };

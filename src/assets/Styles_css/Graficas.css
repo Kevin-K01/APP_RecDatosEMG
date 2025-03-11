@@ -1,24 +1,37 @@
+
+/* Estilos de la gráfica */
 .grafica-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    background: #111;
-    padding: 15px;
-    height: 700px;
-  }
-  
-  .grafica-item {
-    height: 130px;
-    width: 400px;
-  }
-  
-  .grafica-title {
-    color: #fff;
-    text-align: center;
-    margin: 5px;
-  }
-  
-  canvas {
-    background: #222;
-  }
-  
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  background: #111;
+  padding: 15px;
+  height: 640px;
+  transition: transform 0.5s ease-in-out; /* Transición para mover la gráfica */
+}
+
+/* Los elementos dentro de la gráfica */
+.grafica-item {
+  height: 130px;
+  width: 400px;
+}
+
+.grafica-title {
+  color: #fff;
+  text-align: center;
+  margin: 5px;
+}
+
+canvas {
+  background: #222;
+}
+
+
+/* Mueve las gráficas solo cuando el formulario se oculta */
+.formulario.hide ~ .grafica-container {
+  transform: translateX(-60%); /* Ajuste: mueve solo hasta un 60% para que las gráficas sigan visibles */
+}
+
+.formulario.show ~ .grafica-container {
+  transform: translateX(0); /* Las gráficas vuelven a su posición original cuando el formulario está visible */
+}

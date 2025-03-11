@@ -1,160 +1,242 @@
 /* Estilos generales del contenedor */
 .contenedor {
-    display: flex;
-    align-items: flex-start; 
-    gap: 20px; 
-    padding: 20px;
-  }
+  display: flex;
+  align-items: flex-start; 
+  gap: 20px; 
+  padding: 25px;
+  max-width: 100%; /* Evita que sea más ancho de lo necesario */
+  overflow: hidden;
   
-  /* Estilos del formulario */
-  .formulario {
-    width: 500px;
-    padding: 28px;
-    background: #2d3748; 
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); 
-  }
   
-  .formulario label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #fff;
-  }
-  
-  .formulario input,
-  .formulario textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #4a5568;
-    border-radius: 5px;
-    background: #1a202c;
-    color: #fff;
-  }
-  
-  .formulario textarea {
-    height: 100px;
-  }
-  
-  .formulario button {
-    width: 100%;
-    padding: 15px;
-    margin: 10px;
-    background-color: #38bdf8;
-    color: white;
-    border:none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .formulario button:hover {
-    background-color: #0ea5e9;
-  }
+}
 
-  /* Contenedor de los botones */
-  .botones {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 250px;
-  }
-  
-  h1{
-    text-align: center;
-  }
-  /* Botones */
-  .capturar, .detener {
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 6px;
-    border: none;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-  
-  .capturar {
-    background-color: #429b82;
-    color: white;
-    box-shadow: 0 2px 6px rgba(52, 211, 153, 0.2);
-  }
-  
-  .capturar:hover {
-    background-color:#05a268c8 ;
-    box-shadow: 0 4px 8px rgba(52, 211, 153, 0.3);
-    transform: translateY(-1px);
-  }
-  
-  .capturar:active {
-    background-color: #1e7a5f;
-    transform: translateY(1px);
-  }
-  
-  .detener {
-    background-color: #f87171;
-    color: white;
-    box-shadow: 0 2px 6px rgba(248, 113, 113, 0.2);
-  }
-  
-  .detener:hover {
-    background-color: #e03e3e;
-    box-shadow: 0 4px 8px rgba(248, 113, 113, 0.3);
-    transform: translateY(-1px);
-  }
-  
-  .detener:active {
-    background-color: #c44d4d;
-    transform: translateY(1px);
-  }
-  
-  /* Fondo general */
-  body {
-    background-color: #1a202c;
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #f7fafc;
-  }
+/* estilo de botn para mostrar u ocultar formulario */
+.toggle-button {
+  background: #2d3748; /* Mismo fondo que el formulario */
+  color: #38bdf8; /* Azul vibrante para contraste */
+  border: 2px solid #4a5568; /* Borde sutil para dar volumen */
+  cursor: pointer;
+  padding: 12px 24px;
+  position: absolute;
+  right: 1030px;  /*controla la posición del boton para ver u ocultar el formulario*/
+  top: 20px;
+  z-index: 2;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  outline: none;
+  transition: all 0.5s ease-in-out;
+}
+
+/* Efecto Hover: Resalta el botón con un brillo azul */
+.toggle-button:hover {
+  background: #1e293b; /* Azul más oscuro */
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); /* Sombra azul */
+  transform: scale(1.05);
+  color: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+/* Efecto Active: Da la sensación de ser presionado */
+.toggle-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.6);
+  border-color: #38bdf8;
+}
 
 
-  /*Estilos generales del select*/
-  select{
-    background-color:#1a1a1a;
-    color:#00aaff;
-    border:2px solid #0077cc;
-    padding:10px;
-    font-size:14px;
-    border-radius:5px;
-    outline:none;
-    cursor:pointer;
-    transition: all 0.3s ease-in-out;
-    margin: 0px;
-    margin-bottom: 15px;
-  }
-/*cambia el color cuando el usuario se coloca sobre el*/
-  select:hover{
-    border-color:#00ccff;
-  }
-  
-  select:focus{
-    box-shadow:0px 0px 10px #00ccff;
-    border-color: #00ccff;
-  }
 
-  /*estilo para las opciones*/
-  option{
-    background-color:#000000;
-    color:#00aaff;
-    font-size:14px;
-    padding:5px;
-  }
+/* Mueve el botón cuando el formulario se oculta */
+.formulario.hide ~ .toggle-button {
+  transform: translateX(-300%); /* Mueve el botón junto con las gráficas */
+}
 
-  /*Estilo cuando se selecciona una opción*/
-  select option:checked{
-    background-color: #0077cc;
-    color:white;
+/* Mantiene el botón en su posición original cuando el formulario está visible */
+.formulario.show ~ .toggle-button {
+  transform: translateX(0); /* Vuelve a la posición original */
+}
 
-  }
-  
+
+/* Estilos del formulario */
+.formulario {
+  transition: transform 0.5s ease-in-out;
+  width: 800px;
+  padding: 30px;
+  background: #2d3748;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: relative; 
+  z-index: 1; /* Para asegurar que no se sobreponga con otros elementos */
+}
+
+.formulario.hide {
+  transform: translateX(-110%); /* Mueve el formulario hacia la izquierda fuera de la vista */
+}
+
+.formulario.show {
+  transform: translateX(0); /* Mueve el formulario a su posición original */
+}
+
+.formulario label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.formulario input,
+.formulario textarea {
+  width: 380px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #4a5568;
+  border-radius: 5px;
+  background: #1a202c;
+  color: #fff;
+}
+
+.formulario textarea {
+  height: 100px;
+}
+
+.formulario button {
+  width: 100%;
+  padding: 15px;
+  margin: 10px;
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.formulario button:hover {
+  background-color: #0ea5e9;
+}
+
+/* Contenedor de los botones */
+.botones {
+  display: flex;
+  flex-direction:row;
+  gap: 11px;
+  z-index: 2; 
+}
+
+h1 {
+  text-align: center;
+}
+
+/* Estilos generales para los botones */
+.capturar, .detener {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  text-transform: uppercase;
+  position: relative; /* Asegura que el desplazamiento funcione correctamente */
+}
+
+/* Estilos del botón Capturar */
+.capturar {
+  background-color: #309377;
+  color: white;
+  box-shadow: 0 2px 6px rgba(52, 211, 153, 0.2);
+}
+
+.capturar:hover {
+  background-color: #0c8e5ec8;
+  box-shadow: 0 4px 8px rgba(52, 211, 153, 0.3);
+  transform: translateY(-1px);
+}
+
+.capturar:active {
+  background-color: #1e7a5f;
+  transform: translateY(1px);
+}
+
+/* Estilos del botón Detener */
+.detener {
+  background-color: #f87171;
+  color: white;
+  box-shadow: 0 2px 6px rgba(248, 113, 113, 0.2);
+}
+
+.detener:hover {
+  background-color: #e03e3e;
+  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.3);
+  transform: translateY(-1px);
+}
+
+.detener:active {
+  background-color: #c44d4d;
+  transform: translateY(1px);
+}
+
+/* Mueve los botones cuando el formulario se oculta */
+.formulario.hide ~ .botones .capturar,
+.formulario.hide ~ .botones .detener {
+  transform: translateX(-290%); /* Mueve los botones hacia la izquierda */
+}
+
+/* Mantiene los botones en su posición cuando el formulario está visible */
+.formulario.show ~ .botones .capturar,
+.formulario.show ~ .botones .detener {
+  transform: translateX(0); /* Vuelve a la posición original */
+}
+
+
+/* Fondo general */
+body {
+  background-color: #1a202c;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f7fafc;
+}
+
+
+/* Estilos generales del select */
+select {
+  background-color: #1a1a1a;
+  color: #00aaff;
+  border: 2px solid #0077cc;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 0px;
+  margin-bottom: 15px;
+}
+
+/* Cambia el color cuando el usuario se coloca sobre el */
+select:hover {
+  border-color: #00ccff;
+}
+
+select:focus {
+  box-shadow: 0px 0px 10px #00ccff;
+  border-color: #00ccff;
+}
+
+/* Estilo para las opciones */
+option {
+  background-color: #000000;
+  color: #00aaff;
+  font-size: 14px;
+  padding: 5px;
+}
+
+/* Estilo cuando se selecciona una opción */
+select option:checked {
+  background-color: #0077cc;
+  color: white;
+}
+
