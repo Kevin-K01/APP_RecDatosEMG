@@ -18,7 +18,7 @@
   cursor: pointer;
   padding: 12px 24px;
   position: absolute;
-  right: 1030px;  /*controla la posición del boton para ver u ocultar el formulario*/
+  right: 1100px;  /*controla la posición del boton para ver u ocultar el formulario*/
   top: 20px;
   z-index: 2;
   font-size: 14px;
@@ -120,7 +120,7 @@
 /* Contenedor de los botones */
 .botones {
   display: flex;
-  flex-direction:row;
+  flex-direction:column;
   gap: 11px;
   z-index: 2; 
 }
@@ -181,7 +181,7 @@ h1 {
 /* Mueve los botones cuando el formulario se oculta */
 .formulario.hide ~ .botones .capturar,
 .formulario.hide ~ .botones .detener {
-  transform: translateX(-290%); /* Mueve los botones hacia la izquierda */
+  transform: translateX(100%); /* Mueve los botones hacia la izquierda */
 }
 
 /* Mantiene los botones en su posición cuando el formulario está visible */
