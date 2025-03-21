@@ -8,6 +8,8 @@
   padding: 15px;
   height: 640px;
   transition: transform 0.5s ease-in-out; /* Transición para mover la gráfica */
+  position: relative;
+  right:10%;
 }
 
 /* Los elementos dentro de la gráfica */
@@ -29,7 +31,7 @@ canvas {
 
 /* Mueve las gráficas solo cuando el formulario se oculta */
 .formulario.hide ~ .grafica-container {
-  transform: translateX(-60%); /* Ajuste: mueve solo hasta un 60% para que las gráficas sigan visibles */
+  transform: translateX(-61%); /* Ajuste: mueve solo hasta un 60% para que las gráficas sigan visibles */
 }
 
 .formulario.show ~ .grafica-container {

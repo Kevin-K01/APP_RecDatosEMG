@@ -7,7 +7,7 @@
   
   /* Mueve el contenedor de RoboDK cuando el formulario se oculta */
   .formulario.hide ~ .robodk {
-    transform: translateX(-105%); /* Desplaza el contenedor hacia la izquierda */
+    transform: translateX(-133%); /* Desplaza el contenedor hacia la izquierda */
   }
   
 /* Ocultar RoboDK cuando el formulario está visible */

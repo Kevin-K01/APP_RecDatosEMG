@@ -12,14 +12,14 @@
 
 /* estilo de botn para mostrar u ocultar formulario */
 .toggle-button {
-  background: #2d3748; /* Mismo fondo que el formulario */
-  color: #38bdf8; /* Azul vibrante para contraste */
-  border: 2px solid #4a5568; /* Borde sutil para dar volumen */
+  background: #2d3748; 
+  color: #38bdf8; 
+  border: 2px solid #4a5568; 
   cursor: pointer;
   padding: 12px 24px;
-  position: absolute;
-  right: 1100px;  /*controla la posición del boton para ver u ocultar el formulario*/
-  top: 20px;
+  position: relative;
+  right: 10%;  /*controla la posición del boton para ver u ocultar el formulario* 1030px*/
+  top: 1px;
   z-index: 2;
   font-size: 14px;
   font-weight: bold;
@@ -130,7 +130,7 @@ h1 {
 }
 
 /* Estilos generales para los botones */
-.capturar, .detener {
+.capturar, .detener, .movrob, .detrob {
   padding: 10px 16px;
   font-size: 14px;
   font-weight: 500;
@@ -140,53 +140,84 @@ h1 {
   cursor: pointer;
   text-transform: uppercase;
   position: relative; /* Asegura que el desplazamiento funcione correctamente */
+  right: 145%;
 }
 
 /* Estilos del botón Capturar */
 .capturar {
-  background-color: #309377;
+  background-color:#0c8e5ec8 ;
   color: white;
   box-shadow: 0 2px 6px rgba(52, 211, 153, 0.2);
 }
 
 .capturar:hover {
-  background-color: #0c8e5ec8;
+  background-color:  #309377;
   box-shadow: 0 4px 8px rgba(52, 211, 153, 0.3);
   transform: translateY(-1px);
 }
 
-.capturar:active {
-  background-color: #1e7a5f;
-  transform: translateY(1px);
-}
 
 /* Estilos del botón Detener */
 .detener {
-  background-color: #f87171;
+  background-color: #e03e3e;
   color: white;
   box-shadow: 0 2px 6px rgba(248, 113, 113, 0.2);
 }
 
 .detener:hover {
-  background-color: #e03e3e;
+  background-color:  #f87171;
   box-shadow: 0 4px 8px rgba(248, 113, 113, 0.3);
   transform: translateY(-1px);
 }
 
-.detener:active {
-  background-color: #c44d4d;
-  transform: translateY(1px);
+
+
+/*#38bdf8; */
+.movrob:hover{
+  background-color: #13baa1 ;
+  box-shadow: 0 4px 8px rgba(18, 2, 51, 0.3);
+  transform: translateY(-1px);
 }
+.movrob{
+  background-color: #2C2F3E ;
+  color:white;
+}
+
+.detrob{
+  background-color: #2C2F3E;
+  color:white;
+}
+
+.detrob:hover{
+  background-color:  #FF3B7D ;
+  box-shadow: 0 4px 8px rgba(18, 2, 51, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Ocultar botones de mover robot cuando el formulario está visible */
+.formulario.show ~ .botones .movrob,
+.formulario.show ~ .botones .detrob {
+  opacity: 0;
+  visibility: hidden;
+}
+
+
+
+
 
 /* Mueve los botones cuando el formulario se oculta */
 .formulario.hide ~ .botones .capturar,
-.formulario.hide ~ .botones .detener {
-  transform: translateX(100%); /* Mueve los botones hacia la izquierda */
+.formulario.hide ~ .botones .detener,
+.formulario.hide ~ .botones .detrob,
+.formulario.hide ~ .botones .movrob {
+  transform: translateX(40%); /* Mueve los botones hacia la izquierda */
 }
 
 /* Mantiene los botones en su posición cuando el formulario está visible */
 .formulario.show ~ .botones .capturar,
-.formulario.show ~ .botones .detener {
+.formulario.show ~ .botones .detener,
+.formulario.show ~ .botones .detrob,
+.formulario.show ~ .botones .movrob {
   transform: translateX(0); /* Vuelve a la posición original */
 }
 

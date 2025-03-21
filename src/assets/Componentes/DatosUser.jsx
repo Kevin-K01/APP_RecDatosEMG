@@ -17,6 +17,8 @@ const DatosUser = () => {
   const [success, setSuccess] = useState("");
   const [successEmg, setSuccessEmg] = useState("");
   const [errorEmg, setErrorEmg] = useState("");
+  const [errorrob,setErrorrob] = useState("");
+  const [successrob, setSuccessrob] = useState("");
 
   const [isVisible, setIsVisible] = useState(true); // Estado para mostrar/ocultar el formulario
 
@@ -86,6 +88,74 @@ const DatosUser = () => {
       console.error(err);
     }
   };
+
+  //controlar inicio y detención del movimiento del robot
+
+  const robot = async (value) =>{
+    setErrorrob(""); // Limpiar mensajes anteriores
+    setSuccessrob("");
+    if (value===true){
+      const response = await fetch(`http://localhost:5000/start_robot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          indicador: value,
+        }),
+      });
+      const peticion = await response.json();
+
+      if (!peticion.ok) {
+        setErrorrob(peticion.error || "Error al mover el robot.");
+        setTimeout(() => setErrorrob(""), 2000);
+        return;
+      }
+      else{
+        setSuccessrob("Moviendo robot");
+        setTimeout(() => setSuccessrob(""), 2000);
+      }
+
+      console.log("Respuesta del servidor: ", peticion);
+
+    }
+
+    if (value===false){
+      const response = await fetch(`http://localhost:5000/stop_robot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          indicador: value,
+        }),
+      });
+      const peticion = await response.json();
+
+      if (!peticion.ok) {
+        setErrorrob(peticion.error || "Error al detener el robot.");
+        setTimeout(() => setErrorrob(""), 2000);
+        return;
+      }
+      else{
+        setSuccessrob("Robot detenido");
+        setTimeout(() => setSuccessrob(""), 2000);
+      }
+
+
+      if (peticion.message) {
+        setSuccessrob("Robot detenido");
+        setTimeout(() => setSuccessrob(""), 2000);
+      } else {
+        setErrorrob("Error al detener el robot.");
+        setTimeout(() => setErrorrob(""), 2000);
+      }
+
+      console.log("Respuesta del servidor: ", peticion);
+
+    }
+
+  }
 
   // Controlar inicio y detención de la captura EMG
   const capEmg = async (value) => {
@@ -264,17 +334,22 @@ const DatosUser = () => {
 
       <Graficas />
       
-      <div className="botones">
-        
+      <div className="botones">        
         <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
         <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
-      
         {errorEmg && <p className="errorm" style={{ color: "red" }}>{errorEmg}</p>}
         {successEmg && <p className="successm" style={{ color: "green" }}>{successEmg}</p>}
+        <button onClick = {() => robot(true)}className="movrob">MOVER ROBOT</button>
+        <button onClick = {() => robot(false)}className="detrob">DETENER ROBOT</button>
+        {errorrob && <p className="errorm" style={{ color: "red" }}>{errorrob}</p>}
+        {successrob && <p className="successm" style={{ color: "green" }}>{successrob}</p>}
       </div>
+      
+      
       <div className='robodk'>
         <RoboDKWebIframe />  
       </div>
+   
 
 
       
