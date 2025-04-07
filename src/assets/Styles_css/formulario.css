@@ -130,7 +130,7 @@ h1 {
 }
 
 /* Estilos generales para los botones */
-.capturar, .detener, .movrob, .detrob {
+.capturar, .detener {
   padding: 10px 16px;
   font-size: 14px;
   font-weight: 500;
@@ -172,52 +172,16 @@ h1 {
 
 
 
-/*#38bdf8; */
-.movrob:hover{
-  background-color: #13baa1 ;
-  box-shadow: 0 4px 8px rgba(18, 2, 51, 0.3);
-  transform: translateY(-1px);
-}
-.movrob{
-  background-color: #2C2F3E ;
-  color:white;
-}
-
-.detrob{
-  background-color: #2C2F3E;
-  color:white;
-}
-
-.detrob:hover{
-  background-color:  #FF3B7D ;
-  box-shadow: 0 4px 8px rgba(18, 2, 51, 0.3);
-  transform: translateY(-1px);
-}
-
-/* Ocultar botones de mover robot cuando el formulario está visible */
-.formulario.show ~ .botones .movrob,
-.formulario.show ~ .botones .detrob {
-  opacity: 0;
-  visibility: hidden;
-}
-
-
-
-
 
 /* Mueve los botones cuando el formulario se oculta */
 .formulario.hide ~ .botones .capturar,
-.formulario.hide ~ .botones .detener,
-.formulario.hide ~ .botones .detrob,
-.formulario.hide ~ .botones .movrob {
+.formulario.hide ~ .botones .detener {
   transform: translateX(40%); /* Mueve los botones hacia la izquierda */
 }
 
 /* Mantiene los botones en su posición cuando el formulario está visible */
 .formulario.show ~ .botones .capturar,
-.formulario.show ~ .botones .detener,
-.formulario.show ~ .botones .detrob,
-.formulario.show ~ .botones .movrob {
+.formulario.show ~ .botones .detener{
   transform: translateX(0); /* Vuelve a la posición original */
 }
 
@@ -227,6 +191,15 @@ h1 {
 
 .formulario.hide ~ .botones .successm{
   transform: translateX(100%);
+
+}
+
+.formulario.show ~ .botones .errorm{
+  transform: translateX(-140%); /* Mueve los mensajes hacia la izquierda */
+}
+
+.formulario.show ~ .botones .successm{
+  transform: translateX(0);
 
 }
 
