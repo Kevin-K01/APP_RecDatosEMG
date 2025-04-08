@@ -1,21 +1,26 @@
-
 /* Estilos de la gráfica */
 .grafica-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 11px;
+  left:-6%;
   background: #111;
-  padding: 15px;
+  padding: 1%;
   height: 640px;
-  transition: transform 0.5s ease-in-out; /* Transición para mover la gráfica */
+  margin-left: auto;
+  margin-right: auto;
+  transition: transform 0.5s ease-in-out;
   position: relative;
-  right:10%;
+  justify-items: center; 
+  width: 100%;
+  max-width: 800px; 
 }
 
 /* Los elementos dentro de la gráfica */
 .grafica-item {
   height: 130px;
-  width: 400px;
+  width: 100%;
+  max-width: 400px; 
 }
 
 .grafica-title {
@@ -26,14 +31,16 @@
 
 canvas {
   background: #222;
+  width: 100%;
+  height: 100%;
 }
-
 
 /* Mueve las gráficas solo cuando el formulario se oculta */
 .formulario.hide ~ .grafica-container {
-  transform: translateX(-61%); /* Ajuste: mueve solo hasta un 60% para que las gráficas sigan visibles */
+  transform: translateX(-54%); /* Ajuste: mueve  para que las gráficas sigan visibles */
 }
 
+/* Mantiene las gráficas en su posición original cuando el formulario está visible */
 .formulario.show ~ .grafica-container {
-  transform: translateX(0); /* Las gráficas vuelven a su posición original cuando el formulario está visible */
+  transform: translateX(0);
 }

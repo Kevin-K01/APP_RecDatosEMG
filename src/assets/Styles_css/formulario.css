@@ -1,16 +1,19 @@
 /* Estilos generales del contenedor */
 .contenedor {
   display: flex;
+  flex-direction: row; 
   align-items: flex-start; 
-  gap: 20px; 
-  padding: 25px;
-  max-width: 100%; /* Evita que sea más ancho de lo necesario */
-  overflow: hidden;
-  
-  
+  gap: auto; 
+  padding: 10px;
+  max-width: 100%; 
+}
+.errorm, .successm {
+  position: absolute;
+  top:15%;
+  right: 2%;
 }
 
-/* estilo de botn para mostrar u ocultar formulario */
+/* Estilo de botón para mostrar u ocultar formulario */
 .toggle-button {
   background: #2d3748; 
   color: #38bdf8; 
@@ -18,8 +21,9 @@
   cursor: pointer;
   padding: 12px 24px;
   position: relative;
-  right: 10%;  /*controla la posición del boton para ver u ocultar el formulario* 1030px*/
-  top: 1px;
+  left: -8%; 
+  gap: auto;
+  top: auto;
   z-index: 2;
   font-size: 14px;
   font-weight: bold;
@@ -31,53 +35,52 @@
   transition: all 0.5s ease-in-out;
 }
 
-/* Efecto Hover: Resalta el botón con un brillo azul */
+/* Efecto Hover */
 .toggle-button:hover {
-  background: #1e293b; /* Azul más oscuro */
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5); /* Sombra azul */
+  background: #1e293b; 
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
   transform: scale(1.05);
   color: #0ea5e9;
   border-color: #0ea5e9;
 }
 
-/* Efecto Active: Da la sensación de ser presionado */
+/* Efecto Active */
 .toggle-button:active {
   transform: scale(0.98);
   box-shadow: 0 0 5px rgba(56, 189, 248, 0.6);
   border-color: #38bdf8;
 }
 
-
-
 /* Mueve el botón cuando el formulario se oculta */
 .formulario.hide ~ .toggle-button {
-  transform: translateX(-300%); /* Mueve el botón junto con las gráficas */
+  transform: translateX(-220%);
 }
 
 /* Mantiene el botón en su posición original cuando el formulario está visible */
 .formulario.show ~ .toggle-button {
-  transform: translateX(0); /* Vuelve a la posición original */
+  transform: translateX(0);
 }
-
 
 /* Estilos del formulario */
 .formulario {
   transition: transform 0.5s ease-in-out;
-  width: 800px;
+  width: auto;
+  max-width: 800px;
   padding: 30px;
   background: #2d3748;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   position: relative; 
-  z-index: 1; /* Para asegurar que no se sobreponga con otros elementos */
+  z-index: 1;
 }
 
+
 .formulario.hide {
-  transform: translateX(-110%); /* Mueve el formulario hacia la izquierda fuera de la vista */
+  transform: translateX(-110%);
 }
 
 .formulario.show {
-  transform: translateX(0); /* Mueve el formulario a su posición original */
+  transform: translateX(0);
 }
 
 .formulario label {
@@ -89,7 +92,8 @@
 
 .formulario input,
 .formulario textarea {
-  width: 380px;
+  width: 100%;
+  max-width: auto; 
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #4a5568;
@@ -99,13 +103,13 @@
 }
 
 .formulario textarea {
-  height: 100px;
+  height: 100%;
 }
 
 .formulario button {
   width: 100%;
   padding: 15px;
-  margin: 10px;
+  margin: auto;
   background-color: #38bdf8;
   color: white;
   border: none;
@@ -120,13 +124,10 @@
 /* Contenedor de los botones */
 .botones {
   display: flex;
-  flex-direction:column;
-  gap: 11px;
-  z-index: 2; 
-}
-
-h1 {
-  text-align: center;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+  align-items: center;
 }
 
 /* Estilos generales para los botones */
@@ -138,9 +139,11 @@ h1 {
   border: none;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
+  position: relative;
+  right:50%;
   text-transform: uppercase;
-  position: relative; /* Asegura que el desplazamiento funcione correctamente */
-  right: 145%;
+  width: 100%;
+  max-width: auto;
 }
 
 /* Estilos del botón Capturar */
@@ -156,7 +159,6 @@ h1 {
   transform: translateY(-1px);
 }
 
-
 /* Estilos del botón Detener */
 .detener {
   background-color: #e03e3e;
@@ -170,51 +172,43 @@ h1 {
   transform: translateY(-1px);
 }
 
-
-
-
 /* Mueve los botones cuando el formulario se oculta */
 .formulario.hide ~ .botones .capturar,
 .formulario.hide ~ .botones .detener {
-  transform: translateX(40%); /* Mueve los botones hacia la izquierda */
+  transform: translateX(-250%);
 }
 
 /* Mantiene los botones en su posición cuando el formulario está visible */
 .formulario.show ~ .botones .capturar,
 .formulario.show ~ .botones .detener{
-  transform: translateX(0); /* Vuelve a la posición original */
-}
-
-.formulario.hide ~ .botones .errorm{
-  transform: translateX(100%); /* Mueve los mensajes hacia la izquierda */
-}
-
-.formulario.hide ~ .botones .successm{
-  transform: translateX(100%);
-
-}
-
-.formulario.show ~ .botones .errorm{
-  transform: translateX(-140%); /* Mueve los mensajes hacia la izquierda */
-}
-
-.formulario.show ~ .botones .successm{
   transform: translateX(0);
-
 }
 
+/* Estilos para los mensajes de error y éxito */
+.formulario.hide ~ .botones .errorm {
+  transform: translateX(-150%);
+}
 
+.formulario.hide ~ .botones .successm {
+  transform: translateX(-150%);
+}
 
+.formulario.show ~ .botones .errorm {
+  transform: translateX(0);
+}
+
+.formulario.show ~ .botones .successm {
+  transform: translateX(0);
+}
 
 /* Fondo general */
 body {
   background-color: #1a202c;
   font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
+  margin: auto;
+  padding: auto;
   color: #f7fafc;
 }
-
 
 /* Estilos generales del select */
 select {
@@ -227,8 +221,7 @@ select {
   outline: none;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  margin: 0px;
-  margin-bottom: 15px;
+  margin-bottom: auto;
 }
 
 /* Cambia el color cuando el usuario se coloca sobre el */
