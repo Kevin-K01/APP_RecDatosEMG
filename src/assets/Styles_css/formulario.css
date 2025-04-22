@@ -1,11 +1,11 @@
 /* Estilos generales del contenedor */
 .contenedor {
   display: flex;
-  flex-direction: row; 
-  align-items: flex-start; 
-  gap: auto; 
+  flex-direction: row;
+  align-items: flex-start;
+  gap: auto;
   padding: 10px;
-  max-width: 100%; 
+  max-width: 100%;
 }
 .errorm, .successm {
   position: absolute;
@@ -15,16 +15,16 @@
 
 /* Estilo de botón para mostrar u ocultar formulario */
 .toggle-button {
-  background: #2d3748; 
-  color: #38bdf8; 
-  border: 2px solid #4a5568; 
+  background: #2d3748;
+  color: #38bdf8;
+  border: 2px solid #4a5568;
   cursor: pointer;
   padding: 12px 24px;
   position: relative;
   left: -8%; 
   gap: auto;
   top: auto;
-  z-index: 2;
+  z-index: 3;
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Graficas from "./Graficas";
+import DisplaySensor from "./DisplaySensor";
 
 
 
@@ -246,11 +247,11 @@ const DatosUser = () => {
 
           <label>Observaciones</label>
           <textarea
-           name="observaciones"
+            name="observaciones"
             placeholder="Ingresa las observaciones"
             value={formData.observaciones}
             onChange={handleChange}
-           />
+          />
 
           <button type="submit">Agregar</button>
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -264,13 +265,14 @@ const DatosUser = () => {
 
       <Graficas />
       
-      <div className="botones">        
+      <div className="botones">
         <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
         <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
         {errorEmg && <p className="errorm" style={{ color: "red" }}>{errorEmg}</p>}
         {successEmg && <p className="successm" style={{ color: "green" }}>{successEmg}</p>}
 
       </div>
+      <DisplaySensor/>
       
 
       
