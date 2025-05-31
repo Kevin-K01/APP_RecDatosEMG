@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import Graficas from "./Graficas";
-import DisplaySensor from "./DisplaySensor";
-
+import "../styles_css/formulario.css"; // Importa el archivo CSS
 
 
 const DatosUser = () => {
@@ -15,8 +13,6 @@ const DatosUser = () => {
   const [allData, setAllData] = useState([]); // Estado para mantener todos los datos
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [successEmg, setSuccessEmg] = useState("");
-  const [errorEmg, setErrorEmg] = useState("");
 
   const [isVisible, setIsVisible] = useState(true); // Estado para mostrar/ocultar el formulario
 
@@ -88,127 +84,8 @@ const DatosUser = () => {
   };
 
 
-  // Controlar inicio y detención de la captura EMG
-  const capEmg = async (value) => {
-    setErrorEmg(""); // Limpiar mensajes anteriores
-    setSuccessEmg("");
-
-    try {
-      if (value === true) {
-        let nombre2 = prompt("Ingresa el nombre del paciente:");
-        if (nombre2 === null) {
-          alert("Proceso cancelado.");
-          return;
-        }
-        nombre2 = nombre2.trim().toUpperCase();
-
-        if (nombre2 === "") {
-          alert("Ingresa un nombre válido.");
-          return;
-        }
-
-        let sesion = prompt("Ingresa el número de sesión:");
-        if (sesion === null) {
-          alert("Proceso cancelado.");
-          return;
-        }
-
-        sesion = Number(sesion);
-        if (isNaN(sesion) || sesion < 1) {
-          alert("El número de sesión debe ser un valor numérico mayor o igual a 1.");
-          return;
-        }
-        let curp = prompt("Ingresa tu curp: ");
-        if (curp === null) {
-          alert("Proceso cancelado.");
-          return;
-        }
-        curp = curp.trim().toUpperCase();
-
-        if (curp === "") {
-          alert("Ingresa una curp válida.");
-          return;
-        }
-
-        if (!nombre2 || !sesion || !curp) {
-          setErrorEmg("El nombre, la curp y el número de sesión son obligatorios");
-          setTimeout(() => setErrorEmg(""), 2000);
-          alert("El nombre, curp y el número de sesión son obligatorios.");
-          return;
-        }
-
-        const observaciones = prompt("Ingresa las observaciones");
-        if (observaciones === null) {
-          alert("Proceso cancelado.");
-          return;
-        }
-        if (!observaciones) {
-          setErrorEmg("Las observaciones son obligatorias");
-          setTimeout(() => setErrorEmg(""), 2000);
-          return;
-        }
-
-        const response = await fetch(`http://localhost:5000/start_emg_capture`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: nombre2,
-            sesion: sesion,
-            curp: curp,
-            observaciones: observaciones,
-          }),
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-          setErrorEmg(data.error || "Error al buscar al paciente.");
-          setTimeout(() => setErrorEmg(""), 2000);
-          return;
-        }
-
-        if (data.exists) {
-          setSuccessEmg("Paciente encontrado");
-          setTimeout(() => setSuccessEmg(""), 2000);
-        } else {
-          setErrorEmg("Paciente no encontrado, por favor, agrégalo");
-          setTimeout(() => setErrorEmg(""), 2000);
-        }
-
-        console.log("Respuesta del servidor: ", data);
-      }
-
-      if (value === false) {
-        const respons = await fetch(`http://localhost:5000/stop_emg_capture`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            valor: value,
-          }),
-        });
-        const data = await respons.json();
-
-        if (data.message) {
-          setSuccessEmg("Captura EMG detenida");
-          setTimeout(() => setSuccessEmg(""), 2000);
-        } else {
-          setErrorEmg("Error al detener la captura.");
-          setTimeout(() => setErrorEmg(""), 2000);
-        }
-
-        console.log("Respuesta del servidor: ", data);
-      }
-    } catch (error) {
-      setErrorEmg(`Error al capturar datos: ${error.message}`);
-      setTimeout(() => setErrorEmg(""), 2000);
-      console.error("Error al capturar datos: ", error);
-    }
-  };
-
   return (
+  <>
     <div className="contenedor">
       
       
@@ -260,23 +137,9 @@ const DatosUser = () => {
         
 
       </div>
-      <button  className="toggle-button" onClick={toggleForm}> {isVisible ? 'Ocultar' : 'Mostrar'}</button>
-      
-
-      <Graficas />
-      
-      <div className="botones">
-        <button onClick={() => capEmg(true)} className="capturar">Capturar EMG</button>
-        <button onClick={() => capEmg(false)} className="detener">Detener captura</button>
-        {errorEmg && <p className="errorm" style={{ color: "red" }}>{errorEmg}</p>}
-        {successEmg && <p className="successm" style={{ color: "green" }}>{successEmg}</p>}
-
-      </div>
-      <DisplaySensor/>
-      
-
-      
+      <button  className="toggle-button" onClick={toggleForm}> {isVisible ? 'Ocultar' : 'Mostrar'}</button>      
     </div>
+  </>
     
     
 

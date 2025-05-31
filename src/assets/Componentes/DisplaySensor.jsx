@@ -1,4 +1,4 @@
-import {useRef, useEffect, useState, use, act} from "react"
+import {useRef, useEffect, useState} from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
@@ -9,6 +9,7 @@ const socket = io("http://127.0.0.1:5000");
 
 const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100;
+
 
 const DisplaySensor = () => {
     const mountRef = useRef(null);
@@ -102,15 +103,16 @@ const DisplaySensor = () => {
         //Scene
         const scene = new THREE.Scene()
         const camera = new THREE.PerspectiveCamera(
-            25,
+            2,
             currentMount.clientWidth / currentMount.clientHeight,
             0.01,
             1000
         );
 
-        scene.background = new THREE.Color("#1a202c");
-        camera.position.z = -0.2
-        camera.position.y = 0.08
+        scene.background = new THREE.Color("#E6E6FA");
+        camera.position.z = -2.2
+        camera.position.y = 0.9
+        camera.position.x = -0.5
         scene.add(camera)
 
         // enviroment light
@@ -130,6 +132,7 @@ const DisplaySensor = () => {
         //Controls
         const controls = new OrbitControls(camera, renderer.domElement)
         controls.enableDamping = true
+
     
 
         //loader
@@ -139,7 +142,12 @@ const DisplaySensor = () => {
             
                 const model = gltf.scene
                 scene.add(model);
-                model.position.set( -0.02, -0.01, -0.01)
+
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                model.position.sub(center);
+                model.position.set( -0.02, -0.03,0)
+                model.target.set(0, 0, 0);
 
                 const sensorPartsMap = {
                     sensor1: [
@@ -185,6 +193,9 @@ const DisplaySensor = () => {
                 };
                 
                 partes.current = sensorPartsMap;
+                
+                controls.target.set(model.position.x, model.position.y, model.position.z);
+                controls.update(); // actualizar controles después de cambiar target
                 
                 
             

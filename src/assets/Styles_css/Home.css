@@ -1,0 +1,239 @@
+
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/public/Images/rehab.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    height: 120vh;
+
+    
+    
+}
+.home::before {
+    content: "";
+    position: absolute;
+    top: 21.5vh;
+    left: 0;
+    width: 250vh;
+    height: 120vh;
+    background-color: rgba(36, 36, 36, 0.5);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.home > * {
+    position: relative;
+    z-index: 2;
+}
+
+
+img{
+    display: flex;
+    grid-row: 1;
+    grid-column: 2;
+    width: 54%;
+    position: relative;
+    align-self: center;
+    margin-right: 0vh;
+    margin-left: 50vh;
+    background-color: #ecf6f9;
+}
+
+.imgmyoprincipal{
+    display: flex;
+    grid-row: 1;
+    grid-column: 1;
+    width: 5%;
+    position: relative;
+    align-self: center;
+    margin-left: 0vh;
+    margin-right: 0;
+    background-color: #1a202c;
+}
+.head{
+    display: flex;
+    background: linear-gradient(to right, #1a202c, #2f3642);
+    height: 4vh;
+}
+
+.titulo{
+    color:white;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.principal{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color:white;
+}
+
+.navbar {
+    background-color: #1a202c;
+    display : flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0rem 5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+.secciones {
+    display: flex;
+    flex-direction: row;
+    font-size: 1.3rem;
+    justify-content: right;
+    width: 100%;
+}
+
+.links{
+    display: flex;
+    flex-direction: row;
+    margin-left: 5vh;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 0.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.navbar a:hover {
+    color: #006400;
+    background-color: #00FA9A;
+}
+
+.navbar a.inicio:hover{
+    color: #1a202c;
+    background-color: #1a202c;
+}
+
+
+
+
+.btn-login-registro {
+    display: flex;
+    flex-direction: row;
+    align-self: flex-end;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: 15vh;
+    gap: 1rem;
+    margin-bottom: 5vh;
+}
+a {
+    text-decoration: none;
+}
+
+
+.login,
+.registro {
+    padding: 5px 50px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    max-width: 80px;
+    text-align: center;
+}
+
+/* Botón Login - tono azul relacionado con tecnología y precisión */
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1A202C;
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(0, 180, 216, 0.2);
+}
+
+.login:hover {
+    background-color: #2C3E50;
+    box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Botón Registro - tono cian vibrante que refleja innovación médica */
+.registro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6vh;
+    background-color: #00B4D8;
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(0, 180, 216, 0.2);
+}
+
+.registro:hover {
+    background-color: #0096C7;
+    box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3);
+    transform: translateY(-1px);
+}
+
+
+.titulos{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 10vh;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 1000;
+    margin-bottom:80vh ;
+}
+
+.subtitulo{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 100;
+    color: white;
+    margin-top: -2vh;
+    font-style: italic;
+
+}
+
+.bienvenida{
+    flex-direction: column;
+    align-self: flex-start;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 100;
+    margin-top: 30vh;
+    margin-left: 5vh;
+    text-align: center;
+    text-align: justify;
+}
+
+.recuperacion-contracena{
+    display: flex;
+    align-self: flex-end;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: -3vh;
+    font-size: 0.8rem;
+    margin-right: 27vh;
+    text-decoration:underline;
+}
+body{
+    background-color: #8591aa; /* Gris azulado oscuro */
+
+}
