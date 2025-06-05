@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('/public/Images/rehab.png');
+    background-image: url('/Images/rehab.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -17,11 +17,11 @@
 .home::before {
     content: "";
     position: absolute;
-    top: 21.5vh;
+    top: 12vh;
     left: 0;
-    width: 250vh;
-    height: 120vh;
-    background-color: rgba(36, 36, 36, 0.5);
+    width: 218.8vh;
+    height: 121vh;
+    background-color: rgba(55, 55, 55, 0.5);
     z-index: 1;
     pointer-events: none;
 }
@@ -39,32 +39,25 @@ img{
     width: 54%;
     position: relative;
     align-self: center;
-    margin-right: 0vh;
-    margin-left: 50vh;
-    background-color: #ecf6f9;
 }
 
 .imgmyoprincipal{
     display: flex;
     grid-row: 1;
     grid-column: 1;
-    width: 5%;
+    width: 4.5%;
     position: relative;
     align-self: center;
-    margin-left: 0vh;
-    margin-right: 0;
     background-color: #1a202c;
-}
-.head{
-    display: flex;
-    background: linear-gradient(to right, #1a202c, #2f3642);
-    height: 4vh;
+    margin-left: 5vh;
 }
 
 .titulo{
+    display: flex;
     color:white;
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 600;
+
 }
 
 .principal{
@@ -78,10 +71,10 @@ img{
     display : flex;
     flex-direction: row;
     align-items: center;
-    padding: 0rem 5rem;
+    height: 10vh;
+    padding: 0.5rem 0.8rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    
+    z-index: 1000;
 }
 .secciones {
     display: flex;
@@ -89,32 +82,51 @@ img{
     font-size: 1.3rem;
     justify-content: right;
     width: 100%;
+    
 }
 
 .links{
     display: flex;
     flex-direction: row;
-    margin-left: 5vh;
+    margin-left: 3vh;
 }
 
 .navbar a {
+    display: flex;
+    align-items: center;
     color: white;
     text-decoration: none;
-    margin-left: 0.5rem;
     font-weight: 500;
-    transition: color 0.3s ease;
-    padding: 0.5rem;
+    transition: transform 0.3s ease-in-out;
+    transition: color 0.2s ease-in-out;
     border-radius: 5px;
+    padding: 0rem 1rem;
+}
+.navbar{
+    overflow: hidden;
 }
 
-.navbar a:hover {
+.navbar a:not(.link-perfil):hover {
     color: #006400;
     background-color: #00FA9A;
+    transition: transform 0.1s ease-in-out;
 }
+
+.navbar a.link-perfil:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
 
 .navbar a.inicio:hover{
     color: #1a202c;
     background-color: #1a202c;
+
+}
+.navbar a.inicio {
+    display: flex;
+    align-self: center;
+    align-items: center;
 }
 
 
@@ -129,7 +141,7 @@ img{
     position: relative;
     margin-right: 15vh;
     gap: 1rem;
-    margin-bottom: 5vh;
+    margin-bottom: 6vh;
 }
 a {
     text-decoration: none;
@@ -187,11 +199,10 @@ a {
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin-left: 10vh;
+    margin-left: 20vh;
     text-align: center;
-    font-size: 1.5rem;
-    font-weight: 1000;
-    margin-bottom:80vh ;
+    font-size: 1.2rem;
+    margin-bottom: 80vh;
 }
 
 .subtitulo{
@@ -200,40 +211,43 @@ a {
     align-items: center;
     flex-direction: column;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 100;
     color: white;
-    margin-top: -2vh;
+    margin-top: 2vh;
     font-style: italic;
 
 }
 
 .bienvenida{
-    flex-direction: column;
-    align-self: flex-start;
-    justify-content: center;
+    
+    display: block;
+    align-self:end;
+    font-style: italic;
     color: white;
-    font-size: 1.5rem;
-    font-weight: 100;
-    margin-top: 30vh;
-    margin-left: 5vh;
-    text-align: center;
+    font-weight: 300;
+    font-size: 1.3rem;
+    margin-top: 60vh;
+    margin-left: 15vh;
     text-align: justify;
 }
 
-.recuperacion-contracena{
+
+body{
+    background-color: #a5b4c8;
+}
+
+
+.Perfil {
     display: flex;
-    align-self: flex-end;
-    flex-direction: row;
     align-items: center;
+    align-self: center;
+    background-color: #66728d;
+    width: 6vh;
+    height: 6vh;
+    border-radius: 50%;
     justify-content: center;
     color: white;
-    margin-top: -3vh;
-    font-size: 0.8rem;
-    margin-right: 27vh;
-    text-decoration:underline;
+    font-weight: bold;
 }
-body{
-    background-color: #8591aa; /* Gris azulado oscuro */
 
-}

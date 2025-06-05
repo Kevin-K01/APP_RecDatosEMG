@@ -5,10 +5,16 @@ import Home from './assets/Componentes/Home.jsx'
 import Graficas from './assets/Componentes/Graficas.jsx'
 import Iniciosesion from './assets/Componentes/Iniciosesion.jsx'
 import Dashboard from './assets/Componentes/Dashboard.jsx'
+import Recuperarcontrasena from './assets/Componentes/Recuperarcontrasena.jsx'
+import ResumenInicio from './assets/Componentes/ResumenInicio.jsx'
+import Perfil from './assets/Componentes/Perfil.jsx'
+import FormularioToggle from './assets/Componentes/FormularioToggle.jsx'
+import { AuthProvider } from './Context/AuthContext.jsx';
 
 const App = () => {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <NavBar/>
         <Routes>
           <Route path = "/" element={<Home/>}/>
@@ -16,8 +22,14 @@ const App = () => {
           <Route path = "/DatosUser" element={<DatosUser/>}/>
           <Route path = "/Dashboard" element={<Dashboard/>}/>
           <Route path = "/Iniciosesion" element={<Iniciosesion/>}/>
+          <Route path = "/ResumenInicio" element={<ResumenInicio/>}/>
+          <Route path = "/Recuperarcontrasena" element={<Recuperarcontrasena/>}/>
+          <Route path = "/Perfil" element={<Perfil/>}/>
+          <Route path = "/FormularioToggle" element={<FormularioToggle/>}/>
+          <Route path = "*" element={<h1>404 Not Found</h1>}/>
         </Routes>
     </Router>
+    </AuthProvider>
   );
 };
 

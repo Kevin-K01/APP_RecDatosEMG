@@ -1,0 +1,85 @@
+.juegos{
+    display: flex;
+    flex-direction: column;
+    color:white;
+    text-align: center;
+    font-size: 1rem;
+    align-items: center;
+    background-color: #66728d;
+    border-radius: 2vh;
+    margin-left: 1vh;
+    height: 95vh;
+    width: 130%;
+    z-index: 5;
+
+}
+
+
+.juego-nave{
+    display: flex;
+    position: relative;
+    width: 10vh;
+    height: 10vh;
+    top: 2vh;
+}
+
+.juego-nave:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.space{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    top: 0;
+    left: 0;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+}
+.juego-objetos{
+    display: flex;
+    position: relative;
+    width: 10vh;
+    height: 10vh;
+    top: 2vh;
+}
+.juego-objetos:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.objetos{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    top: 5vh;
+    left: 0;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+
+}
+.robot{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: center;
+    top: 10vh;
+    left: 0;
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+}
+
+.juego-robot{
+    display: flex;
+    position: relative;
+    width: 10vh;
+    height: 10vh;
+    top: 2vh;
+}
+.juego-robot:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}

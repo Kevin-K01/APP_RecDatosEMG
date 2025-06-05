@@ -1,0 +1,52 @@
+
+.espacio-juegos{
+    display: flex;
+    color: white;
+    flex-direction: column;
+    background-color: #66728d;
+    border-radius: 2vh;
+    margin-left: 1vh;
+    height: 95vh;
+    width: 130%;
+    text-align: center;
+    align-items: center;
+}
+
+
+.botones-juego{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 1rem;
+    margin-right: 2vh;
+    margin-top: 2vh;
+    text-align: center;
+    z-index: 1;
+}
+.btn-juego{
+    color: white;
+    background-color: #1a202c;
+    display: flex;
+    align-self: flex-end;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 16px;
+    font-weight: 500px;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.5s ease-in-out;
+    position: relative;
+    width: 10vh;
+    text-align: center;
+}
+
+.btn-juego:hover{
+    background-color: #00FA9A;
+    color:#006400;
+    transform: scale(1.1);
+    transition: transform 0.5s ease-in-out;
+}
+
