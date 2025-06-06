@@ -3,9 +3,11 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 import bcrypt
+from Connection_Myo import rec_emg
+from threading import Thread
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Configuración de la base de datos
@@ -17,6 +19,26 @@ app.config['MYSQL_DB'] = 'appmyorehaby'
 app.config['PROPAGATE_EXCEPTIONS'] = True
 mysql = MySQL(app)
 
+
+
+
+#funcion para iniciar conexion y transmision desde el brazalete myo
+def iniciar_myo():
+    rec_emg.iniciar()
+
+#funcion para emitir emg
+def emitir_emg():
+    while True:
+        if rec_emg.runing:
+            datos_actuales = rec_emg.get_emg_data()
+            if datos_actuales:
+                _, emg = datos_actuales
+                socketio.emit('emg_data', {'emg': emg})
+        socketio.sleep(0.02)
+            
+            
+            
+            
 # Función para verificar si el usuario ya existe
 def usuario_existente(nombre):
     cursor = mysql.connection.cursor()
@@ -77,11 +99,21 @@ def login():
     else:
         return jsonify({"mensaje": "Usuario o contraseña incorrectos"}), 401
 
+
+
 # Evento de conexión de SocketIO
 @socketio.on('connect')
 def handle_connect():
     print("Cliente conectado")
 
+
 # Ejecutar la aplicación
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    thread_socketio = Thread(target=socketio.run, args=(app,), kwargs={"debug": True, "use_reloader": False, "allow_unsafe_werkzeug": True})
+    thread_socketio.start()
+
+    thread_myo = Thread(target=iniciar_myo)
+    thread_myo.start()
+
+    thread_emitter = Thread(target=emitir_emg)
+    thread_emitter.start()

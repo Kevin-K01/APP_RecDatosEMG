@@ -45,7 +45,7 @@ const Iniciosesion = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.error || "Error al iniciar sesión");
+        setError(errorData.error || "Usuario o contraseña incorrectos");
         setTimeout(() => setError(""), 2000);
       } else {
         const data = await response.json();

@@ -139,5 +139,127 @@
     color:#1a202c;
 }
 
+@media (max-width: 700px) {
+  .espacio-gen-inicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2vh 1vh;
+    gap: 2vh;
+  }
+
+  .espacio-inicio,
+  .espacio-estadisticas {
+    width: 90%;
+    padding: 2vh;
+    border-radius: 1.5vh;
+  }
+
+  .espacio-buscar-paciente {
+    flex-direction: column;
+    gap: 1vh;
+    padding: 2vh;
+    width: 90%;
+  }
+
+  .espacio-buscar-paciente input {
+    width: 80vw;
+    padding: 1.2vh;
+    font-size: 1rem;
+  }
+
+  .btn-buscar,
+  .link-agregar-paciente {
+    width: 80%;
+    font-size: 1rem;
+    padding: 1.2vh;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .Resumen-pacientes {
+    flex-direction: column;
+    padding: 2vh;
+    gap: 2vh;
+    width: 100%;
+  }
+
+  .pacientes {
+    width: 90%;
+    padding: 2vh;
+    font-size: 1rem;
+  }
+
+  .tituloResumenInicio {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .graficas-inicio {
+    width: 100%;
+    padding: 1vh;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .espacio-gen-inicio {
+    padding: 2vh;
+    gap: 1vh;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
+  .espacio-inicio{
+    width: 35vw;
+  }
+
+  .pacientes{
+    width: 10vw;
+  }
+
+
+  .espacio-inicio,
+  .espacio-estadisticas {
+    border-radius: 1vh;
+    padding: 2vh;
+  }
+
+  .espacio-buscar-paciente {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1vh;
+    padding: 1vh;
+    flex-wrap: nowrap;
+  }
+
+  .espacio-buscar-paciente input {
+    width: 15vw;
+    padding: 1vh;
+    font-size: 0.9rem;
+  }
+
+  .btn-buscar,
+  .link-agregar-paciente {
+    padding: 0.8vh 1.5vh;
+    font-size: 0.9rem;
+    min-width: 80px;
+  }
+
+  .pacientes,
+  .Resumen-pacientes {
+    padding: 3vh;
+    font-size: 0.9rem;
+  }
+
+  .graficas-inicio {
+    padding: 1vh;
+  }
+
+  .tituloResumenInicio {
+    font-size: 1rem;
+  }
+}
+
+
 
 

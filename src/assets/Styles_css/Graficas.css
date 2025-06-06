@@ -7,18 +7,21 @@
   position: relative;
   gap: 5vh;
   padding: 2vh;
+  transition: all 0.3s ease-in-out;
+  margin-left: 1vh;
 }
 
 
 /* Estilos de la gráfica */
 .grafica-container {
   display: grid;
+  grid-row: 1;
+  grid-column: 1;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  left:0px;
+  gap: 15px;
   background: #66728d;
   padding: 1%;
-  height: 640px;
+  height: 645px;
   transition: transform 0.5s ease-in-out;
   position: relative;
   justify-items: center;
@@ -48,6 +51,162 @@ canvas {
   height: 100%;
   border-radius: 1vh;
 }
+/* Estilo de botón para mostrar u ocultar formulario */
+.toggle-button {
+  grid-row: 1;
+  grid-column: 1;
+  display: flex;
+  align-self:flex-start;
+  position: relative;
+  background: #1e293b;
+  color: #38bdf8;
+  border: 0.1vh solid #4a5568;
+  cursor: pointer;
+  padding: 1vh 1vh;
+  z-index: 100;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.5s ease-in-out;
+  width: 120px;
+  margin-left: -6vh;
+  margin-top: -1vh;
+}
+
+/* Efecto Hover */
+.toggle-button:hover {
+  background: #1e293b;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  transform: scale(1.05);
+  color: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+/* Efecto Active */
+.toggle-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.6);
+  border-color: #38bdf8;
+}
+
+/* Cuando hay gráficas visibles, con margen a la izquierda */
+.con-graficas .juegos{
+    transform: translateX(0%);
+}
+.con-graficas .contenedor3d-botones {
+    transform: translateX(0%);
+}
+
+.con-graficas .espacio-juegos {
+    transform: translateX(0%);
+}
 
 
 
+/* Cuando no hay gráficas, se mueve a la izquierda (sin margen) */
+.sin-graficas .juegos, .espacio-juegos{
+  transform: translate(-30%);
+}
+.sin-graficas .contenedor3d-botones {
+  transform: translate(0%);
+}
+
+
+
+@media (max-width: 768px) {
+  .contenedor-gn {
+    grid-template-columns: 1fr;
+    gap: 3vh;
+    margin-left: 0;
+    padding: 2vh 1vh;
+  }
+
+  .grafica-container {
+  gap: 25px;
+  height: 200px;
+  margin-top:3vh;
+}
+
+  .grafica-item {
+    height: 45px;
+    max-width: 100%;
+  }
+
+  .toggle-button {
+    width: 100%;
+    font-size: 0.9rem;
+    margin-left: 0;
+    margin-top: 0;
+    justify-content: center;
+  }
+
+
+  canvas {
+    height: 100%;
+    width: 100%;
+  }
+
+  .sin-graficas .juegos,
+  .sin-graficas .espacio-juegos {
+    transform: translate(0%);
+  }
+
+  .contenedor3d-botones {
+    gap: 1.5vh;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .contenedor-gn {
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 1vw;
+    gap: 5vw;
+    margin-left: 0.5vw;
+  }
+
+  .grafica-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 3vw;
+    padding: 1vw;
+    height: 68vw;
+    width: 100%;
+    max-width: 80vw;
+    border-radius: 1vw;
+  }
+
+  .grafica-item {
+    height: 100px;
+    max-width: 95%;
+  }
+
+  .grafica-title {
+    font-size: 0.9rem;
+    margin: 3px;
+  }
+
+  canvas {
+    border-radius: 0.8vh;
+  }
+
+  .toggle-button {
+    width: 100px;
+    font-size: 0.9rem;
+    padding: 0.7vh 1vh;
+    margin-left: -4vh;
+  }
+
+  .con-graficas .juegos,
+  .con-graficas .contenedor3d-botones,
+  .con-graficas .espacio-juegos {
+    transform: translateX(0%);
+  }
+
+  .sin-graficas .juegos,
+  .sin-graficas .espacio-juegos {
+    transform: translateX(-20%);
+  }
+
+  .sin-graficas .contenedor3d-botones {
+    transform: translateX(0%);
+  }
+}

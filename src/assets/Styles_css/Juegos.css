@@ -7,7 +7,6 @@
     align-items: center;
     background-color: #66728d;
     border-radius: 2vh;
-    margin-left: 1vh;
     height: 95vh;
     width: 130%;
     z-index: 5;
@@ -82,4 +81,37 @@
 .juego-robot:hover{
     transform: scale(1.1);
     transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .juegos{
+    width: 100%;
+    height: 100%;
+    padding: 2vh 0;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .juegos {
+    height: auto;
+    width: 100%;
+    padding: 2vh;
+    font-size: 0.9rem;
+  }
+
+  .juego-nave,
+  .juego-objetos,
+  .juego-robot {
+    width: 8vh;
+    height: 8vh;
+    top: 1vh;
+  }
+
+  .space,
+  .objetos,
+  .robot {
+    font-size: 1rem;
+    padding: 0.5rem;
+    top: 2vh;
+  }
 }

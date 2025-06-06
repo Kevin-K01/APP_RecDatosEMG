@@ -1,9 +1,10 @@
 .contenedor3d-botones{
   display: flex;
+  align-self: center;
   flex-direction: column;
   align-items: center;
-  align-self:center;
   position: relative;
+  gap: 2vh;
 
 }
 .Container3D {
@@ -11,36 +12,23 @@
     flex-direction: column;
     align-self: flex-end;
     position:relative;
-    width: 50vh;
+    width: 100%;
     height: 40vh;
     z-index: 3;
   }
-  /* Contenedor de los botones */
-.botones {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  flex-direction: row;
-  align-self: flex-end;
-  margin-right: 1.5rem;
-  align-items: center;
-  gap: 1vh;
-  z-index: 5;
-}
+
 
 /* Estilos generales para los botones */
 .capturar, .detener {
   padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500px;
+  font-size: 1rem;
+  font-weight: bold;
   border-radius: 5px;
   border: none;
   width:20vh;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
   position: relative;
-  text-transform: uppercase;
 }
 
 /* Estilos del botón Capturar */
@@ -76,7 +64,7 @@
   position: relative;
   text-align: center;
   gap: 10px;
-  height: 47vh;
+  height: 25vh;
   width: 100%;
 }
 
@@ -88,4 +76,89 @@
 .botones .successm {
   position: relative;
   transform: translateX(-50%);
+}
+
+
+/* Estilo de botón para mostrar u ocultar formulario */
+.toggle3d {
+  display: flex;
+  position: relative;
+  background: #1e293b;
+  color: #38bdf8;
+  border: 0.1vh solid #4a5568;
+  cursor: pointer;
+  padding: 10px 16px;
+  z-index: 5;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: all 0.5s ease-in-out;
+  width:20vh;
+}
+
+/* Efecto Hover */
+.toggle3d:hover {
+  background: #1e293b;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  transform: scale(1.05);
+  color: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+/* Efecto Active */
+.toggle3d:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.6);
+  border-color: #38bdf8;
+}
+
+/* Cuando hay modelo visible, con margen a la izquierda */
+.con-modelo .capturar,.detener {
+    transform: translateY(0%);
+}
+.con-modelo .capturar,  .detener {
+    transform: translateY(0%);
+}
+
+/* Cuando no hay modelo, se mueve a la izquierda (sin margen) */
+
+.sin-modelo .contenedor3d-botones {
+  transform: translateY(0%);
+}
+
+
+
+
+
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .contenedor3d-botones {
+    flex-direction: column;
+    gap: 1.5vh;
+    padding: 1vh 0;
+    width: 100%;
+  }
+
+  .Container3D {
+    height: 35vh; /* un poco más compacto */
+    width: 100%;
+    align-self: center;
+  }
+
+  .capturar,
+  .detener,
+  .toggle3d {
+    width: 90%; /* adaptar al ancho disponible */
+    max-width: 250px;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+
+  .mensajes {
+    height: auto;
+    padding: 1vh;
+    font-size: 0.9rem;
+    flex-direction: column;
+  }
 }
