@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
-from threading import Thread
-from Connection_MyoBLE import myo_ble_client
-import time
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 import bcrypt
+from Connection_Myo import rec_emg
+from threading import Thread
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Configuración de la base de datos
@@ -19,30 +19,26 @@ app.config['MYSQL_DB'] = 'appmyorehaby'
 app.config['PROPAGATE_EXCEPTIONS'] = True
 mysql = MySQL(app)
 
-def iniciar_myo():
-    myo_ble_client.iniciar()
 
+
+
+#funcion para iniciar conexion y transmision desde el brazalete myo
+def iniciar_myo():
+    rec_emg.iniciar()
+
+#funcion para emitir emg
 def emitir_emg():
     while True:
-        emg = myo_ble_client.get_emg_data()
-        if emg:
-            socketio.emit('emg_data', {'emg': emg})
+        if rec_emg.runing:
+            datos_actuales = rec_emg.get_emg_data()
+            if datos_actuales:
+                _, emg = datos_actuales
+                socketio.emit('emg_data', {'emg': emg})
         socketio.sleep(0.02)
-        
-def emitir_acelerometro():
-    while True:
-        acel = myo_ble_client.get_acelerometro()
-        if acel:
-            socketio.emit('acel_data', {'acelerometro': acel})
-        socketio.sleep(0.02)
-        
-def emitir_gyroscopio():
-    while True:
-        gyro = myo_ble_client.get_giroscopio()
-        if gyro:
-            socketio.emit('gyro_data', {'gyroscopio': gyro})
-        socketio.sleep(0.02)
-
+            
+            
+            
+            
 # Función para verificar si el usuario ya existe
 def usuario_existente(nombre):
     cursor = mysql.connection.cursor()
@@ -105,19 +101,19 @@ def login():
 
 
 
-if __name__ == "__main__":
-    # Inicia servidor y hilos
+# Evento de conexión de SocketIO
+@socketio.on('connect')
+def handle_connect():
+    print("Cliente conectado")
+
+
+# Ejecutar la aplicación
+if __name__ == '__main__':
     thread_socketio = Thread(target=socketio.run, args=(app,), kwargs={"debug": True, "use_reloader": False, "allow_unsafe_werkzeug": True})
     thread_socketio.start()
 
     thread_myo = Thread(target=iniciar_myo)
     thread_myo.start()
 
-    thread_emg = Thread(target=emitir_emg)
-    thread_emg.start()
-    
-    thread_acel = Thread(target=emitir_acelerometro)
-    thread_acel.start()
-    
-    thread_gyro = Thread(target=emitir_gyroscopio)
-    thread_gyro.start()
+    thread_emitter = Thread(target=emitir_emg)
+    thread_emitter.start()
