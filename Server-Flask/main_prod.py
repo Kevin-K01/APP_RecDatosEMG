@@ -103,22 +103,19 @@ def login():
     else:
         return jsonify({"mensaje": "Usuario o contraseña incorrectos"}), 401
 
+@socketio.on('connect')
+def handle_connect():
+    print("Cliente conectado")
+    # Iniciar tareas en background solo cuando se conecte un cliente
+    socketio.start_background_task(iniciar_myo)
+    socketio.start_background_task(emitir_emg)
+    socketio.start_background_task(emitir_acelerometro)
+    socketio.start_background_task(emitir_gyroscopio)
 
+@socketio.on('disconnect')
+def handle_disconnect():
+    print("Cliente desconectado")
 
 
 if __name__ == "__main__":
-    # Inicia servidor y hilos
-    thread_socketio = Thread(target=socketio.run, args=(app,), kwargs={"debug": True, "use_reloader": False, "allow_unsafe_werkzeug": True})
-    thread_socketio.start()
-
-    thread_myo = Thread(target=iniciar_myo)
-    thread_myo.start()
-
-    thread_emg = Thread(target=emitir_emg)
-    thread_emg.start()
-    
-    thread_acel = Thread(target=emitir_acelerometro)
-    thread_acel.start()
-    
-    thread_gyro = Thread(target=emitir_gyroscopio)
-    thread_gyro.start()
+    socketio.run(app, host='0.0.0.0', port=5000)
