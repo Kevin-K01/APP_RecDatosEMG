@@ -37,7 +37,8 @@ const Iniciosesion = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch("http://localhost:5000/login", { // para que funcione en el servidor local
+      //const response = await fetch("/api/login", {                //descomentar y comentar la anterior para que funcione en el servidor de producción
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

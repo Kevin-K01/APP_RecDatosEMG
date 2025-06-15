@@ -5,7 +5,10 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import "../styles_css/brazalete.css";
 import { io } from "socket.io-client";
 
-const socket = io("http://127.0.0.1:5000");
+//const socket = io();  //descomentar para producción
+const socket = io("http://127.0.0.1:5000");    //comentar para producción
+
+
 
 const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100;

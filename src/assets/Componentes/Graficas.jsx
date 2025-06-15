@@ -25,7 +25,10 @@ ChartJS.register(
   Legend
 );
 
-const socket = io("http://127.0.0.1:5000");
+
+//const socket = io();   //descomentar para producción
+const socket = io("http://127.0.0.1:5000");  //comentar para producción
+
 
 const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100;
@@ -52,6 +55,7 @@ const Graficas = () => {
 
   useEffect(() => {
     const handleEmgData = (data) => {
+      //console.log("EMG recibido:", data.emg);
       setEmgData((prevData) =>
         prevData.map((sensorData, i) => [
           ...sensorData.slice(1),

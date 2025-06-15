@@ -8,7 +8,8 @@ from flask_mysqldb import MySQL
 import bcrypt
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*",port=5000, async_mode="threading")
 
 # Configuración de la base de datos
 app.config['MYSQL_HOST'] = 'localhost'
@@ -22,26 +23,26 @@ mysql = MySQL(app)
 def iniciar_myo():
     myo_ble_client.iniciar()
 
-def emitir_emg():
+async def emitir_emg():
     while True:
         emg = myo_ble_client.get_emg_data()
         if emg:
             socketio.emit('emg_data', {'emg': emg})
-        socketio.sleep(0.02)
+        await socketio.sleep(0.05)
         
-def emitir_acelerometro():
+async def emitir_acelerometro():
     while True:
         acel = myo_ble_client.get_acelerometro()
         if acel:
             socketio.emit('acel_data', {'acelerometro': acel})
-        socketio.sleep(0.02)
+        await socketio.sleep(0.05)
         
-def emitir_gyroscopio():
+async def emitir_gyroscopio():
     while True:
         gyro = myo_ble_client.get_giroscopio()
         if gyro:
             socketio.emit('gyro_data', {'gyroscopio': gyro})
-        socketio.sleep(0.02)
+        await socketio.sleep(0.05)
 
 # Función para verificar si el usuario ya existe
 def usuario_existente(nombre):
@@ -106,16 +107,17 @@ def login():
 @socketio.on('connect')
 def handle_connect():
     print("Cliente conectado")
-    # Iniciar tareas en background solo cuando se conecte un cliente
-    socketio.start_background_task(iniciar_myo)
-    socketio.start_background_task(emitir_emg)
-    socketio.start_background_task(emitir_acelerometro)
-    socketio.start_background_task(emitir_gyroscopio)
-
 @socketio.on('disconnect')
 def handle_disconnect():
     print("Cliente desconectado")
+    myo_ble_client.detener()
 
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0', port=5000)
+    thread_myo = Thread(target=iniciar_myo, daemon=True)
+    thread_myo.start()
+    # Inicia tareas asíncronas correctamente
+    socketio.start_background_task(emitir_emg)
+    socketio.start_background_task(emitir_acelerometro)
+    socketio.start_background_task(emitir_gyroscopio)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=False,)  #agregar server='eventlet' para produccion

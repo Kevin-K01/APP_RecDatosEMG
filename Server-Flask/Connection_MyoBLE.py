@@ -25,7 +25,6 @@ class MyoBLEClient:
         self.acelerometro = deque(maxlen=maxlen)
         self.gyro_lock = Lock()
         self.giroscopio = deque(maxlen=maxlen)
-
         self._loop = None
         self._thread = None
         self._stop_event = Event()
@@ -52,31 +51,57 @@ class MyoBLEClient:
             self.giroscopio.append(gyro)
 
     async def _run(self):
-        try:
-            async with BleakClient(self.address) as client:
-                self._client = client
-                if not await client.is_connected():
-                    print("No se pudo conectar al Myo BLE")
-                    return
-                print("Conectado al Myo BLE")
+        while not self._stop_event.is_set():
+            try:
+                print("Intentando conectar al Myo BLE en", self.address)
+                async with BleakClient(self.address) as client:
+                    self._client = client
+                    await asyncio.sleep(1)
 
-                await client.write_gatt_char(COMMAND_CHARACTERISTIC, COMMAND_PAYLOAD)
-                print("Streaming EMG + IMU activado")
+                    if not client.is_connected:
+                        print("No se pudo conectar al Myo BLE")
+                        await asyncio.sleep(5)
+                        continue
 
-                for uuid in EMG_CHARACTERISTICS:
-                    await client.start_notify(uuid, self.emg_handler)
-                await client.start_notify(IMU_CHARACTERISTIC, self.imu_handler)
+                    print("Conectado al Myo BLE")
 
-                while not self._stop_event.is_set():
-                    await asyncio.sleep(0.1)
+                    UNLOCK_PAYLOAD = bytearray([0x01, 0x01, 0x00])
+                    await client.write_gatt_char(COMMAND_CHARACTERISTIC, UNLOCK_PAYLOAD)
+                    print("Myo desbloqueado")
 
-                for uuid in EMG_CHARACTERISTICS:
-                    await client.stop_notify(uuid)
-                await client.stop_notify(IMU_CHARACTERISTIC)
-                print("Streaming detenido y desconectado")
+                    await client.write_gatt_char(COMMAND_CHARACTERISTIC, COMMAND_PAYLOAD)
+                    print("Streaming EMG + IMU activado")
 
-        except Exception as e:
-            print(f"Error en conexión BLE: {e}")
+                    for uuid in EMG_CHARACTERISTICS:
+                        await client.start_notify(uuid, self.emg_handler)
+                        print(f"Notificaciones activadas para EMG: {uuid}")
+                    await client.start_notify(IMU_CHARACTERISTIC, self.imu_handler)
+                    print(f"Notificaciones activadas para IMU: {IMU_CHARACTERISTIC}")
+
+                    while not self._stop_event.is_set():
+                        if not client.is_connected:
+                            print("Myo BLE desconectado, intentando reconectar...")
+                            break
+                        await asyncio.sleep(0.1)
+
+                    for uuid in EMG_CHARACTERISTICS:
+                        try:
+                            await client.stop_notify(uuid)
+                        except Exception:
+                            pass
+                    try:
+                        await client.stop_notify(IMU_CHARACTERISTIC)
+                    except Exception:
+                        pass
+                    print("Streaming detenido o conexión perdida")
+
+            except Exception as e:
+                import traceback
+                print(f"Error en conexión BLE: {e}")
+                traceback.print_exc()
+
+            await asyncio.sleep(5)  # Esperar antes de volver a intentar conectar
+
 
     def _thread_target(self):
         self._loop = asyncio.new_event_loop()
@@ -117,5 +142,5 @@ class MyoBLEClient:
         with self.gyro_lock:
             return self.giroscopio[-1] if self.giroscopio else None
 
-# Instancia global que usarás en backend
+# Instancia global
 myo_ble_client = MyoBLEClient()

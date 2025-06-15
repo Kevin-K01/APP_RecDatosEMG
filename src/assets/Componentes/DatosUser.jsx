@@ -34,7 +34,8 @@ const DatosUser = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000//add_user", {
+      const response = await fetch("http://localhost:5000//add_user",{    //para que funcione en el servidor local
+      //const response = await fetch("/api/add_user", {    ////descomentar y comentar la anterior para que funcione en el servidor de producción
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, email, contrasena }),
