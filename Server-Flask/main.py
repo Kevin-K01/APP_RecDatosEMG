@@ -19,23 +19,29 @@ app.config['MYSQL_DB'] = 'appmyorehaby'
 app.config['PROPAGATE_EXCEPTIONS'] = True
 mysql = MySQL(app)
 
+# =======================
+# Iniciar Myo
+# =======================
 def iniciar_myo():
     myo_ble_client.iniciar()
 
+# =======================
+# Hilos para emitir datos
+# =======================
 def emitir_emg():
     while True:
         emg = myo_ble_client.get_emg_data()
         if emg:
             socketio.emit('emg_data', {'emg': emg})
         socketio.sleep(0.02)
-        
+
 def emitir_acelerometro():
     while True:
         acel = myo_ble_client.get_acelerometro()
         if acel:
             socketio.emit('acel_data', {'acelerometro': acel})
         socketio.sleep(0.02)
-        
+
 def emitir_gyroscopio():
     while True:
         gyro = myo_ble_client.get_giroscopio()
@@ -43,7 +49,17 @@ def emitir_gyroscopio():
             socketio.emit('gyro_data', {'gyroscopio': gyro})
         socketio.sleep(0.02)
 
-# Función para verificar si el usuario ya existe
+# Nuevo hilo para emitir la pose
+def emitir_pose():
+    while True:
+        pose_data = myo_ble_client.get_poses()
+        if pose_data:
+            socketio.emit("pose_data", {"pose": pose_data})
+        socketio.sleep(0.02)
+
+# =======================
+# Funciones de usuario
+# =======================
 def usuario_existente(nombre):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM usuarios WHERE fullname = %s", (nombre,))
@@ -51,8 +67,7 @@ def usuario_existente(nombre):
     cursor.close()
     return resultado is not None
 
-#funcion de comprobacion de usario en la base de datos
-def verificar_usuario(nombre,contrasena):
+def verificar_usuario(nombre, contrasena):
     cursor = mysql.connection.cursor()
     query = "SELECT * FROM usuarios WHERE fullname = %s"
     cursor.execute(query, (nombre,))
@@ -63,12 +78,13 @@ def verificar_usuario(nombre,contrasena):
         return True
     return False
 
-# Ruta principal index
+# =======================
+# Rutas
+# =======================
 @app.route('/')
 def index():
     return "Servidor WebSocket activo"
 
-# Ruta para agregar un nuevo usuario
 @app.route('/add_user', methods=['POST'])
 def add_user():
     data = request.get_json()
@@ -76,22 +92,22 @@ def add_user():
     email = data.get('email')
     contrasena = data.get('contrasena')
 
-    # Verificar si el usuario ya existe
     if usuario_existente(nombre):
         return {"error": "El usuario ya existe"}, 409
-    # Hashear la contraseña antes de guardarla
+
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(contrasena.encode('utf-8'), salt)
-    # Insertar el nuevo usuario
+
     cursor = mysql.connection.cursor()
-    cursor.execute("INSERT INTO usuarios (fullname, email, password) VALUES (%s, %s, %s)", (nombre, email, hashed_password))
+    cursor.execute(
+        "INSERT INTO usuarios (fullname, email, password) VALUES (%s, %s, %s)",
+        (nombre, email, hashed_password)
+    )
     mysql.connection.commit()
     cursor.close()
 
     return {"mensaje": "Usuario agregado exitosamente"}, 201
 
-
-# Ruta para iniciar sesión
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -99,21 +115,27 @@ def login():
     contrasena = data.get('contrasena')
     
     if verificar_usuario(nombre, contrasena):
-        return jsonify({"mensaje": "Inicio de sesión exitoso", "nombre": nombre}), 200 
+        return jsonify({"mensaje": "Inicio de sesión exitoso", "nombre": nombre}), 200
     else:
         return jsonify({"mensaje": "Usuario o contraseña incorrectos"}), 401
 
-
-
-
+# =======================
+# Main
+# =======================
 if __name__ == "__main__":
-    # Inicia servidor y hilos
-    thread_socketio = Thread(target=socketio.run, args=(app,), kwargs={"debug": True, "use_reloader": False, "allow_unsafe_werkzeug": True})
+    # Servidor SocketIO
+    thread_socketio = Thread(
+        target=socketio.run,
+        args=(app,),
+        kwargs={"debug": True, "use_reloader": False, "allow_unsafe_werkzeug": True}
+    )
     thread_socketio.start()
 
+    # Conexión Myo
     thread_myo = Thread(target=iniciar_myo)
     thread_myo.start()
 
+    # Hilos de datos
     thread_emg = Thread(target=emitir_emg)
     thread_emg.start()
     
@@ -122,3 +144,7 @@ if __name__ == "__main__":
     
     thread_gyro = Thread(target=emitir_gyroscopio)
     thread_gyro.start()
+    
+    # Hilo de poses
+    thread_pose = Thread(target=emitir_pose)
+    thread_pose.start()

@@ -25,10 +25,8 @@ ChartJS.register(
   Legend
 );
 
-
-//const socket = io();   //descomentar para producción
-const socket = io("http://127.0.0.1:5000");  //comentar para producción
-
+const socket = io();   //descomentar para producción
+//const socket = io("http://127.0.0.1:5000");  //comentar para producción
 
 const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100;
@@ -38,8 +36,9 @@ const Graficas = () => {
     Array.from({ length: NUM_SENSORS }, () => Array(WINDOW_SIZE).fill(0))
   );
 
-    // Leer estado inicial desde localStorage (solo la primera vez)
-    const [showCharts, setShowCharts] = useState(() => {
+  
+  // Leer estado inicial desde localStorage (solo la primera vez)
+  const [showCharts, setShowCharts] = useState(() => {
     const saved = localStorage.getItem("showCharts");
     return saved === null ? true : JSON.parse(saved);
   });
@@ -53,9 +52,10 @@ const Graficas = () => {
     setShowCharts(!showCharts);
   };
 
+
+  // ================= EMG data =================
   useEffect(() => {
     const handleEmgData = (data) => {
-      //console.log("EMG recibido:", data.emg);
       setEmgData((prevData) =>
         prevData.map((sensorData, i) => [
           ...sensorData.slice(1),
@@ -65,7 +65,6 @@ const Graficas = () => {
     };
 
     socket.on("emg_data", handleEmgData);
-
     return () => {
       socket.off("emg_data", handleEmgData);
     };
@@ -100,11 +99,7 @@ const Graficas = () => {
                   maintainAspectRatio: false,
                   animation: false,
                   scales: {
-                    y: {
-                      min: -100,
-                      max: 100,
-                      ticks: { color: "#aaa" },
-                    },
+                    y: { min: -100, max: 100, ticks: { color: "#aaa" } },
                     x: { display: false },
                   },
                   elements: { point: { radius: 0 } },
@@ -115,6 +110,8 @@ const Graficas = () => {
           ))}
         </div>
       )}
+
+
       <Juegos />
       <DisplaySensor />
     </div>
@@ -122,4 +119,3 @@ const Graficas = () => {
 };
 
 export default Graficas;
-

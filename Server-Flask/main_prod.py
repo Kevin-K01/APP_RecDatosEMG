@@ -100,7 +100,7 @@ def login():
     contrasena = data.get('contrasena')
     
     if verificar_usuario(nombre, contrasena):
-        return jsonify({"mensaje": "Inicio de sesión exitoso", "nombre": nombre}), 200 
+        return jsonify({"mensaje": "Inicio de sesión exitoso", "nombre": nombre}), 200
     else:
         return jsonify({"mensaje": "Usuario o contraseña incorrectos"}), 401
 
@@ -120,4 +120,4 @@ if __name__ == "__main__":
     socketio.start_background_task(emitir_emg)
     socketio.start_background_task(emitir_acelerometro)
     socketio.start_background_task(emitir_gyroscopio)
-    socketio.run(app, host="0.0.0.0", port=5000, debug=False,)  #agregar server='eventlet' para produccion
+    socketio.run(app, host="0.0.0.0", port=5000, debug=False,)
