@@ -25,8 +25,8 @@ ChartJS.register(
   Legend
 );
 
-//const socket = io();   //descomentar para producción
-const socket = io("http://127.0.0.1:5000");  //comentar para producción
+const socket = io();   //descomentar para producción
+//const socket = io("http://127.0.0.1:5000");  //comentar para producción
 
 const NUM_SENSORS = 8;
 const WINDOW_SIZE = 100;
