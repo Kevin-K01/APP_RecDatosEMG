@@ -215,4 +215,3 @@ class MyoBLEClient:
 # Instancia global
 # =======================
 myo_ble_client = MyoBLEClient()
-myo_ble_client.iniciar()
