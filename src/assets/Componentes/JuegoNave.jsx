@@ -9,8 +9,8 @@ import enemigoImg from "../ImagenesJuegos/enemigo.png";
 import balaImg from "../ImagenesJuegos/bala.png";
 import { io } from "socket.io-client";
 
-const socket = io("http://127.0.0.1:5000"); // desarrollo
-
+//const socket = io("http://127.0.0.1:5000"); // desarrollo
+const socket = io();     //producción
 const JuegoNave = ({ salirDelJuego }) => {
   const [navePos, setNavePos] = useState({ x: 220, y: 480 });
   const [running, setRunning] = useState(false);
